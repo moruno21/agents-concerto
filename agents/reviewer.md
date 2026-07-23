@@ -26,7 +26,9 @@ Read the full diff and the commit sequence. Check, at minimum:
 
 - **Correctness** against the sub-task's acceptance criteria.
 - **Tests**: present and meaningful where the repo supports tests; do they
-  actually cover the new behavior?
+  actually cover the new behavior? If the repo's config entry defines a `test`
+  command, you may run it from the PR's worktree to confirm the suite is green;
+  a failing suite is `NEEDS_FIXES`.
 - **Tidy First discipline** — this is a hard gate. The PR must be a *structural*
   commit (no behavior change) followed by a *behavioral* commit. If a single
   commit mixes refactoring with behavior change, the verdict is `NEEDS_FIXES`

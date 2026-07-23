@@ -22,8 +22,9 @@ only **local** project config; the orchestrator logic stays in the plugin.
    ```
 
 3. Help the user fill `./.agent-workspace/config.md`:
-   - `repos`: one entry per target repo — `slug`, absolute `path`, and `start`
-     command. The pipeline is agnostic to the count; one repo or N is just a
+   - `repos`: one entry per target repo — `slug`, absolute `path`, and an
+     optional `test` command (bounded; runs the suite and exits non-zero on
+     failure). The pipeline is agnostic to the count; one repo or N is just a
      longer list.
    - `tracker`: `github`, `gitlab`, or `none`. If `none`, tasks are read from
      `./.agent-workspace/feature-request.md`.

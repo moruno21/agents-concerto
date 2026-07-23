@@ -19,8 +19,8 @@ role is and is not*. If the two ever disagree, `CLAUDE.md` wins for execution.
 
 ## Inputs
 
-- `.agent-workspace/config.md` — target repo list (path + start command +
-  slug), tracker (`github|gitlab|none`), branch/commit conventions.
+- `.agent-workspace/config.md` — target repo list (slug + path + optional
+  `test` command), tracker (`github|gitlab|none`), branch/commit conventions.
 - The task: from the configured tracker, or from
   `.agent-workspace/feature-request.md`.
 

@@ -52,8 +52,8 @@ ready for review". The merge is 100% human.
 
 - **`.agent-workspace/config.md`** — the project config (copied from
   `config.md.example`). It declares:
-  - `repos`: a list of target repos, each with `path`, `start` command, and
-    `slug`.
+  - `repos`: a list of target repos, each with `slug`, `path`, and an optional
+    `test` command (bounded; runs the suite and exits non-zero on failure).
   - `tracker`: `github` | `gitlab` | `none`.
   - `branch_convention` (default `feat/<task>-<repo-slug>`) and any commit
     conventions.

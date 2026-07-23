@@ -23,6 +23,12 @@ yourself outside them).
 failing test first, then make it pass. If there is genuinely no test
 infrastructure, implement directly and say so in the PR body.
 
+**Run the test command before finishing.** If the repo's config entry defines a
+`test` command, run it from your worktree and make sure it passes before you
+open or update the PR — the sub-task is not done while it fails. State the test
+command and its result in the PR body. If no `test` command is configured and
+there is no discoverable suite, say so instead.
+
 **Tidy First — two separate commits, in order:**
 1. **Structural commit**: refactors, renames, moves, reformatting — *no
    behavior change*. Tests must pass before and after. Commit it on its own.
