@@ -113,10 +113,16 @@ anything.
 
 ## Error handling
 
-If any agent is blocked — missing permission, unclear requirement, broken
-environment — do **not** die silently and do **not** try to work around it by
-writing code yourself. Escalate that sub-task as `ready-for-human` with the
-blocker described, and continue with the remaining sub-tasks.
+If any agent is blocked — missing permission, a command denied by policy (see
+`.claude/settings.json`), unclear requirement, broken environment — do **not**
+die silently and do **not** try to work around it (no writing code yourself, no
+finding an alternate command to bypass a deny rule). Escalate that sub-task as
+`ready-for-human` with the blocker described, and continue with the remaining
+sub-tasks.
+
+A denied command is a deliberate boundary, not an obstacle to route around. In
+particular, any merge is denied on purpose: if the work is otherwise done,
+escalate it as `ready-for-human` for the human to merge.
 
 ## Branch & commit conventions
 
