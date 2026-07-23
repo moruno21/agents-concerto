@@ -57,9 +57,8 @@ Then describe the task (or write `.agent-workspace/feature-request.md` when
 
 ```
 .claude-plugin/     plugin.json + marketplace.json (plugin packaging)
-agents/             dispatcher, implementer-standard (sonnet),
-                    implementer-complex (opus), reviewer, orchestrator (spec)
-docs/               implementer-contract.md (shared implementer behavior)
+agents/             dispatcher, implementer (model chosen per invocation),
+                    reviewer, orchestrator (spec)
 .claude/
   settings.json     standalone permissions (no merge) + hook wiring
 skills/

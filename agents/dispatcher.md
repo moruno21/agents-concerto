@@ -20,12 +20,12 @@ difficulty, but do not modify anything.
 
 ## Output
 
-Exactly one tier, and nothing else. Each tier selects which implementer agent
-the orchestrator launches:
+Exactly one tier, and nothing else. Each tier maps to the **model** the
+orchestrator passes to the single `implementer` agent when it spawns it:
 
-- `trivial`  → `implementer-standard` (model **sonnet**)
-- `standard` → `implementer-standard` (model **sonnet**)
-- `complex`  → `implementer-complex` (model **opus**)
+- `trivial`  → model **sonnet**
+- `standard` → model **sonnet**
+- `complex`  → model **opus**
 
 Return it as a single structured line the orchestrator can parse, e.g.:
 

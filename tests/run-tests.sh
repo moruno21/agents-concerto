@@ -79,15 +79,24 @@ import json, sys
 json.load(open(sys.argv[1]))
 PY
 then ok "plugin.json is valid JSON"; else no "plugin.json invalid"; fi
-for a in orchestrator dispatcher reviewer implementer-standard implementer-complex; do
+for a in orchestrator dispatcher reviewer implementer; do
   if [ -f "$ROOT/agents/$a.md" ]; then ok "agent present: $a"; else no "agent missing: $a"; fi
 done
-if grep -q "^model: sonnet" "$ROOT/agents/implementer-standard.md" && grep -q "^model: opus" "$ROOT/agents/implementer-complex.md"; then
-  ok "implementer variants differ by model (sonnet vs opus)"
+if [ ! -f "$ROOT/agents/implementer-standard.md" ] && [ ! -f "$ROOT/agents/implementer-complex.md" ]; then
+  ok "single implementer (variants collapsed)"
 else
-  no "implementer variant models are wrong"
+  no "old implementer variants still present"
 fi
-if [ -f "$ROOT/docs/implementer-contract.md" ]; then ok "shared implementer contract present"; else no "shared implementer contract missing"; fi
+if grep -qE "^model:" "$ROOT/agents/implementer.md"; then
+  no "implementer must omit frontmatter model (chosen per invocation)"
+else
+  ok "implementer omits frontmatter model (per-invocation override)"
+fi
+if grep -q "sonnet" "$ROOT/agents/dispatcher.md" && grep -q "opus" "$ROOT/agents/dispatcher.md"; then
+  ok "dispatcher maps tiers to models (sonnet/opus)"
+else
+  no "dispatcher no longer maps tiers to models"
+fi
 
 echo ""
 echo "Totals: $PASS passed, $FAIL failed"

@@ -36,10 +36,10 @@ role is and is not*. If the two ever disagree, `CLAUDE.md` wins for execution.
 ## How you delegate
 
 1. For each sub-task, launch the **dispatcher** to get a complexity tier.
-2. Launch the implementer agent the tier selects, in its own git worktree:
-   `trivial|standard` → **`implementer-standard`** (sonnet), `complex` →
-   **`implementer-complex`** (opus). You pick the agent; you do not override a
-   model at call time.
+2. Launch the single **`implementer`** agent in its own git worktree, passing the
+   model the tier selects **per invocation**: `trivial|standard` → **sonnet**,
+   `complex` → **opus**. There is one implementer agent; you choose its model at
+   call time (the per-invocation `model` parameter overrides frontmatter).
 3. When the implementer opens a draft PR, launch the **reviewer** on it.
 4. Run the review→fix loop: on `NEEDS_FIXES`, hand the review back to the
    implementer. **Cap: `max_fix_cycles` from config (default 3).** After the
