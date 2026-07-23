@@ -38,7 +38,19 @@ tracker: none
 
 ## Conventions
 
+`commit_convention` controls how commit messages are formatted:
+
+- `conventional` (default): [Conventional Commits](https://www.conventionalcommits.org).
+  Maps cleanly onto Tidy First — the structural commit uses `refactor:`, the
+  behavioral commit uses `feat:` / `fix:` (or `test:`, `docs:`, `chore:` as
+  appropriate). Enables automated changelogs and semver.
+- `default`: free-form clear messages, structural commit then behavioral commit.
+
+Either way the structural/behavioral split is enforced; the convention only
+changes the message format, not the commit discipline.
+
 ```yaml
 branch_convention: "feat/<task>-<repo-slug>"
 base_branch: main
+commit_convention: conventional
 ```

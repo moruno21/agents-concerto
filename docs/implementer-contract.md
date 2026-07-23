@@ -42,6 +42,19 @@ to have only a behavioral commit.
 Follow the branch/commit naming from config (default branch
 `feat/<task>-<repo-slug>`).
 
+**Commit message format — from `commit_convention` in config (default
+`conventional`).** When `conventional`, use [Conventional Commits](https://www.conventionalcommits.org),
+which lines up with the Tidy First split:
+- Structural commit → `refactor:` (or `style:` / `chore:` for pure formatting or
+  tooling moves) — never a type that implies behavior change.
+- Behavioral commit → `feat:` for new behavior, `fix:` for a bug fix, plus
+  `test:` / `docs:` where that is the actual change.
+
+The prefix must match the commit's real content: a `refactor:` that changes
+behavior is a Tidy First violation and the reviewer will reject it. When
+`commit_convention: default`, use free-form clear messages instead, keeping the
+same structural-then-behavioral order.
+
 ## Output
 
 - A **draft PR** against the repo's base branch, with a body that states: what

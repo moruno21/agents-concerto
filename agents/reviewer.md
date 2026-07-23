@@ -32,7 +32,11 @@ Read the full diff and the commit sequence. Check, at minimum:
 - **Tidy First discipline** — this is a hard gate. The PR must be a *structural*
   commit (no behavior change) followed by a *behavioral* commit. If a single
   commit mixes refactoring with behavior change, the verdict is `NEEDS_FIXES`
-  and you say exactly which commit violates it.
+  and you say exactly which commit violates it. When the repo uses
+  `commit_convention: conventional`, the commit type is a **hint** for this gate
+  — a `refactor:` commit whose diff changes behavior (or a `feat:`/`fix:` that is
+  purely structural) is a violation — but the **diff is the source of truth**,
+  not the prefix. Judge by what the code does, then confirm the prefix matches.
 - Clarity, obvious bugs, security/data-integrity risks, and scope creep.
 
 Post one specific, actionable **review comment** on the PR with `gh pr comment`.

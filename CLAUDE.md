@@ -55,8 +55,9 @@ ready for review". The merge is 100% human.
   - `repos`: a list of target repos, each with `slug`, `path`, and an optional
     `test` command (bounded; runs the suite and exits non-zero on failure).
   - `tracker`: `github` | `gitlab` | `none`.
-  - `branch_convention` (default `feat/<task>-<repo-slug>`) and any commit
-    conventions.
+  - `branch_convention` (default `feat/<task>-<repo-slug>`) and
+    `commit_convention` (default `conventional` — Conventional Commits;
+    `default` for free-form messages).
 - **The task**, obtained from:
   - the configured `tracker` (an issue/ticket), or
   - `.agent-workspace/feature-request.md` when `tracker: none`.
@@ -225,7 +226,12 @@ merge-order decision.
 Read from `config.md`. Sensible defaults if unset:
 - Branch: `feat/<task>-<repo-slug>` (one branch per sub-task/repo).
 - Commits: the implementer's structural-then-behavioral pair, each a clear
-  message; no mixing.
+  message; no mixing. `commit_convention` (default `conventional`) sets the
+  message format: with `conventional`, the structural commit is `refactor:` and
+  the behavioral commit is `feat:`/`fix:` (etc.), which maps directly onto the
+  Tidy First split; with `default`, free-form messages. The convention changes
+  only the message format — the structural/behavioral discipline is enforced
+  regardless.
 
 ## Observability & run summary
 
