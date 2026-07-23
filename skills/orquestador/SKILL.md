@@ -50,6 +50,9 @@ If `./.agent-workspace/config.md` does not exist, tell the user to run
 
 ## Agents
 
-The pipeline agents (`dispatcher`, `implementer`, `reviewer`) ship with this
-plugin and are launched by you per the workflow. The `dispatcher`'s tier sets
-the `implementer`'s model. The `reviewer` never approves or merges.
+The pipeline agents (`dispatcher`, `implementer-standard`, `implementer-complex`,
+`reviewer`) ship with this plugin and are launched by you per the workflow. The
+`dispatcher`'s tier selects which implementer agent runs — `implementer-standard`
+(sonnet) for `trivial|standard`, `implementer-complex` (opus) for `complex` —
+rather than overriding a model at call time. The `reviewer` never approves or
+merges.

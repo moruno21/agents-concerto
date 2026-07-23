@@ -79,8 +79,15 @@ import json, sys
 json.load(open(sys.argv[1]))
 PY
 then ok "plugin.json is valid JSON"; else no "plugin.json invalid"; fi
-NAGENTS=$(find "$ROOT/agents" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
-if [ "$NAGENTS" = "4" ]; then ok "4 agents present in agents/"; else no "expected 4 agents, found $NAGENTS"; fi
+for a in orchestrator dispatcher reviewer implementer-standard implementer-complex; do
+  if [ -f "$ROOT/agents/$a.md" ]; then ok "agent present: $a"; else no "agent missing: $a"; fi
+done
+if grep -q "^model: sonnet" "$ROOT/agents/implementer-standard.md" && grep -q "^model: opus" "$ROOT/agents/implementer-complex.md"; then
+  ok "implementer variants differ by model (sonnet vs opus)"
+else
+  no "implementer variant models are wrong"
+fi
+if [ -f "$ROOT/docs/implementer-contract.md" ]; then ok "shared implementer contract present"; else no "shared implementer contract missing"; fi
 
 echo ""
 echo "Totals: $PASS passed, $FAIL failed"

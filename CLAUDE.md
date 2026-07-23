@@ -41,7 +41,8 @@ ready for review". The merge is 100% human.
 4. **Worktree isolation.** Every code-touching agent runs in its own git
    worktree. You never touch the human's working checkout.
 5. **Model by complexity, not by role.** The dispatcher scores each sub-task
-   and that score picks the implementer's model.
+   and that score picks which implementer agent runs — `implementer-standard`
+   (sonnet) or `implementer-complex` (opus).
 6. **Stop at "PR ready".** No auto-merge. Never configure or request merge
    permissions.
 7. **Cycle cap with escape hatch.** Max 3 review→fix cycles per sub-task, then
@@ -118,8 +119,10 @@ For each sub-task in the current wave (its steps 5a–5e run independently and
 concurrently with its wave-mates):
 
   **5a. Dispatch (model selection).** Launch the `dispatcher` on the sub-task.
-  It returns a tier: `trivial|standard` → **sonnet**, `complex` → **opus**.
-  Record the tier. Log: `agent=dispatcher phase=dispatch model=<sonnet|opus>`.
+  It returns a tier that maps to a specific implementer **agent**:
+  `trivial|standard` → **`implementer-standard`** (sonnet), `complex` →
+  **`implementer-complex`** (opus). Record the tier. Log:
+  `agent=dispatcher phase=dispatch model=<sonnet|opus>`.
 
   **5b. Create the worktree.** Run `scripts/worktree-create.sh` to make an
   isolated worktree for this sub-task/repo on a fresh branch named per
@@ -127,11 +130,16 @@ concurrently with its wave-mates):
   it is operating in a worktree and not the human's checkout; if it cannot
   guarantee that, it aborts and so do you.
 
-  **5c. Implement.** Launch the `implementer` in that worktree, **overriding
-  its model** with the dispatcher's tier. It follows TDD where tests exist and
-  Tidy First (a structural commit, then a behavioral commit), and opens a
-  **draft PR**. It never marks the PR ready and never merges. Log:
-  `agent=implementer phase=pr_opened pr=<url>`.
+  **5c. Implement.** Launch the implementer agent the tier selected in 5a —
+  `implementer-standard` (sonnet) or `implementer-complex` (opus) — in that
+  worktree. Model-by-complexity is achieved by **choosing which agent to
+  launch**, not by overriding a model at call time: a CLAUDE.md-driven session
+  cannot reliably pass a per-invocation model override, so the two agents differ
+  only in their frontmatter `model` and share one behavioral contract
+  (`docs/implementer-contract.md`). The implementer follows TDD where tests
+  exist and Tidy First (a structural commit, then a behavioral commit), and opens
+  a **draft PR**. It never marks the PR ready and never merges. Log:
+  `agent=<implementer-standard|implementer-complex> phase=pr_opened pr=<url>`.
 
   **5d. Review.** Launch the `reviewer` on the draft PR. It posts a consolidated
   review comment (via `gh pr comment`, citing `path:line`) and emits `CLEAN` or
@@ -140,9 +148,9 @@ concurrently with its wave-mates):
   `agent=reviewer verdict=<CLEAN|NEEDS_FIXES> cycle=<n>`.
 
   **5e. Fix loop (cap 3).** While the verdict is `NEEDS_FIXES` and fewer than
-  3 cycles have run: hand the reviewer's comments back to the `implementer` in
-  the same worktree, then re-review. Count each round (log each review verdict
-  with its `cycle`).
+  3 cycles have run: hand the reviewer's comments back to the same implementer
+  agent (the one launched in 5c) in the same worktree, then re-review. Count each
+  round (log each review verdict with its `cycle`).
   - On `CLEAN`: the PR is ready for human review. Stop this sub-task. Do not
     merge. Log: `status=clean`.
   - After the 3rd cycle without `CLEAN`: stop looping, label the PR

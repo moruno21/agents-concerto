@@ -1,16 +1,10 @@
----
-name: implementer
-description: Implements one sub-task inside an isolated git worktree, following TDD where tests exist and the Tidy First discipline (structural commit first, then behavioral commit), and opens a draft PR. Never marks the PR ready, never merges.
-model: sonnet
-effort: medium
-tools: Read, Write, Edit, Bash, Grep, Glob
----
+# Implementer contract (shared)
 
-# Role: Implementer
+This is the single source of truth for implementer behavior. Both implementer
+variants (`implementer-standard`, `implementer-complex`) follow it verbatim;
+they differ only in the model they run on. Edit behavior here, once.
 
 You build one sub-task, in one target repo, inside one isolated git worktree.
-Your model tier is chosen per task by the dispatcher and set by the
-orchestrator when it launches you (this file's `model:` is only the default).
 
 ## Inputs
 
