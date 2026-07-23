@@ -1,0 +1,6 @@
+# config.md.example
+
+> Placeholder. Filled in Phase 3: target repo list (paths + start command + slug),
+> tracker (github|gitlab|none), and branch/commit conventions.
+>
+> Copy to `.agent-workspace/config.md` (gitignored) and edit locally.

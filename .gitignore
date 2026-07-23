@@ -1,0 +1,21 @@
+# Local orchestrator config (never commit the real one)
+.agent-workspace/config.md
+
+# Runtime state written by the orchestrator (plan, notes, reviews, logs)
+.agent-workspace/plan.md
+.agent-workspace/reviews/
+.agent-workspace/notes/
+.agent-workspace/runs/
+
+# Git worktrees created per task
+.worktrees/
+worktrees/
+
+# Execution artifacts
+*.log
+logs/
+.scratch/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
