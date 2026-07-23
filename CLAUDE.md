@@ -97,8 +97,25 @@ Write `.agent-workspace/plan.md` with:
 Keep sub-tasks scoped to a single repo where possible (a cross-repo task
 becomes one sub-task per repo).
 
-### 5. Per sub-task, run the pipeline
-For each sub-task (respecting `Blocked by` ordering — dependents wait):
+### 5. Run the pipeline in waves
+Do not run sub-tasks one-by-one in plan order. Schedule them by dependency:
+
+- Build the dependency graph from each sub-task's `Blocked by`.
+- A **wave** is the set of sub-tasks whose `Blocked by` list is empty or already
+  satisfied. Run **every sub-task in a wave concurrently** — each in its own
+  worktree, each through its own dispatch → implement → review → fix loop.
+- When a wave finishes, form the next wave from newly-unblocked sub-tasks.
+  Repeat until all sub-tasks are done. A sub-task escalated to
+  `ready-for-human` counts as "done" for unblocking purposes; note in the
+  summary that dependents proceeded on top of an unmerged, escalated PR.
+- With no dependencies, all sub-tasks run in a single wave. With a linear
+  `Blocked by` chain, waves degenerate to sequential — that is correct.
+
+Because each worktree is isolated and **nothing is auto-merged**, sibling PRs in
+the same wave never collide during the run (see "No conflict worker" below).
+
+For each sub-task in the current wave (its steps 5a–5e run independently and
+concurrently with its wave-mates):
 
   **5a. Dispatch (model selection).** Launch the `dispatcher` on the sub-task.
   It returns a tier: `trivial|standard` → **sonnet**, `complex` → **opus**.
@@ -148,6 +165,22 @@ sub-tasks.
 A denied command is a deliberate boundary, not an obstacle to route around. In
 particular, any merge is denied on purpose: if the work is otherwise done,
 escalate it as `ready-for-human` for the human to merge.
+
+## Parallelism & the missing conflict worker
+
+Sibling sub-tasks in a wave run concurrently, each on its own branch in its own
+worktree. Unlike orchestrators that **auto-merge** sibling PRs, this pipeline
+deliberately has **no conflict-resolution worker**, and does not need one:
+
+- Nothing is merged during the run — every branch ends as a draft PR. Two
+  branches touching the same file only *conflict* at merge time, and the merge
+  is entirely human.
+- The human resolves any cross-PR conflicts when merging by hand, in whatever
+  order they choose. That is the intended division of labour, not a gap.
+
+So do not build, wait on, or ask for a conflict worker. If two sibling PRs
+clearly overlap, just note it in the run summary so the human knows to expect a
+merge-order decision.
 
 ## Branch & commit conventions
 
