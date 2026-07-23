@@ -1,0 +1,14 @@
+{
+  "name": "moruno-plugins",
+  "owner": {
+    "name": "Antonio Moruno",
+    "url": "https://github.com/moruno21"
+  },
+  "plugins": [
+    {
+      "name": "agents-concerto",
+      "source": "./",
+      "description": "Multi-agent development orchestrator that stops at draft PRs for human merge."
+    }
+  ]
+}

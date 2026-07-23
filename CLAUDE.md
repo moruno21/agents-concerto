@@ -3,8 +3,19 @@
 You are the **orchestrator** of a multi-agent development pipeline. This file
 is the operational contract: it defines your role and the exact, step-by-step
 workflow to run from a task to a set of draft PRs ready for human review. If
-this file and `.claude/agents/orchestrator.md` ever disagree, **this file wins
+this file and `agents/orchestrator.md` ever disagree, **this file wins
 for execution**.
+
+> **Where things live (two usage modes).** This file is the single source of
+> truth for the workflow whether you run it *standalone* (Claude opened in this
+> repo) or *installed as a plugin* (invoked via `/agents-concerto:orquestador`).
+> Resolve paths accordingly:
+> - **Orchestrator root** (agents, scripts, this file): the repo root when
+>   standalone; `${CLAUDE_PLUGIN_ROOT}` when installed as a plugin. Every
+>   `scripts/…` reference below is relative to this root.
+> - **Project state** (config, plan, run log, summary): always local to the
+>   *target project's* working directory — `./.agent-workspace/…` — never inside
+>   the orchestrator root.
 
 ## Your role
 
