@@ -49,8 +49,16 @@ tracker: none
 Either way the structural/behavioral split is enforced; the convention only
 changes the message format, not the commit discipline.
 
+`max_fix_cycles` caps the review→fix loop per sub-task (default `3`). When the
+cap is hit without a `CLEAN` verdict, the sub-task is labeled `ready-for-human`
+and handed off. The **existence** of a finite cap with a human escape hatch is a
+design invariant; only the number is configurable. Lower it (e.g. `2`) to
+escalate to a human sooner, or raise it to be more patient — but a very high
+value defeats the purpose (agents loop instead of asking a human).
+
 ```yaml
 branch_convention: "feat/<task>-<repo-slug>"
 base_branch: main
 commit_convention: conventional
+max_fix_cycles: 3
 ```

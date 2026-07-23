@@ -75,8 +75,8 @@ CLAUDE.md           the workflow — single source of truth (both modes)
 
 Config-driven repo count; agents by pipeline function not technology; two-party
 authority (no code-writer merges); worktree isolation; model chosen by
-complexity; **stop at "PR ready"** (no auto-merge); max 3 review→fix cycles then
-`ready-for-human`.
+complexity; **stop at "PR ready"** (no auto-merge); a finite review→fix cap
+(`max_fix_cycles`, default 3) then `ready-for-human`.
 
 ## Cost
 

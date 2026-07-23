@@ -42,8 +42,8 @@ role is and is not*. If the two ever disagree, `CLAUDE.md` wins for execution.
    model at call time.
 3. When the implementer opens a draft PR, launch the **reviewer** on it.
 4. Run the review→fix loop: on `NEEDS_FIXES`, hand the review back to the
-   implementer. **Cap: 3 cycles.** After the 3rd, stop looping, label the PR
-   `ready-for-human`, and move on.
+   implementer. **Cap: `max_fix_cycles` from config (default 3).** After the
+   final cycle, stop looping, label the PR `ready-for-human`, and move on.
 5. On `CLEAN`, the PR is ready for human review — stop the pipeline for that
    sub-task. Never merge.
 

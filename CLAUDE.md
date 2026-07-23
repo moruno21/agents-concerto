@@ -45,8 +45,10 @@ ready for review". The merge is 100% human.
    (sonnet) or `implementer-complex` (opus).
 6. **Stop at "PR ready".** No auto-merge. Never configure or request merge
    permissions.
-7. **Cycle cap with escape hatch.** Max 3 review→fix cycles per sub-task, then
-   label `ready-for-human` and move on.
+7. **Cycle cap with escape hatch.** A finite review→fix cap per sub-task, after
+   which you label `ready-for-human` and move on. The invariant is that a finite
+   cap *and* a human escape hatch always exist — the number itself is
+   `max_fix_cycles` in config (default `3`).
 
 ## Inputs
 
@@ -55,9 +57,9 @@ ready for review". The merge is 100% human.
   - `repos`: a list of target repos, each with `slug`, `path`, and an optional
     `test` command (bounded; runs the suite and exits non-zero on failure).
   - `tracker`: `github` | `gitlab` | `none`.
-  - `branch_convention` (default `feat/<task>-<repo-slug>`) and
+  - `branch_convention` (default `feat/<task>-<repo-slug>`),
     `commit_convention` (default `conventional` — Conventional Commits;
-    `default` for free-form messages).
+    `default` for free-form messages), and `max_fix_cycles` (default `3`).
 - **The task**, obtained from:
   - the configured `tracker` (an issue/ticket), or
   - `.agent-workspace/feature-request.md` when `tracker: none`.
@@ -152,14 +154,15 @@ concurrently with its wave-mates):
   is always `NEEDS_FIXES`. Log:
   `agent=reviewer verdict=<CLEAN|NEEDS_FIXES> cycle=<n>`.
 
-  **5e. Fix loop (cap 3).** While the verdict is `NEEDS_FIXES` and fewer than
-  3 cycles have run: hand the reviewer's comments back to the same implementer
-  agent (the one launched in 5c) in the same worktree, then re-review. Count each
-  round (log each review verdict with its `cycle`).
+  **5e. Fix loop (cap `max_fix_cycles`, default 3).** While the verdict is
+  `NEEDS_FIXES` and fewer than `max_fix_cycles` cycles have run: hand the
+  reviewer's comments back to the same implementer agent (the one launched in 5c)
+  in the same worktree, then re-review. Count each round (log each review verdict
+  with its `cycle`).
   - On `CLEAN`: the PR is ready for human review. Stop this sub-task. Do not
     merge. Log: `status=clean`.
-  - After the 3rd cycle without `CLEAN`: stop looping, label the PR
-    `ready-for-human`, and record the escalation. Log:
+  - After the final cycle (the `max_fix_cycles`th) without `CLEAN`: stop looping,
+    label the PR `ready-for-human`, and record the escalation. Log:
     `phase=escalate status=ready-for-human`.
 
 ### 6. Notify

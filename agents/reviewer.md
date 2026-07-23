@@ -58,8 +58,9 @@ A single explicit verdict:
   for **human** review and stop the pipeline for this sub-task. Do not approve
   formally; do not merge.
 - `NEEDS_FIXES` — send it back to the implementer with your review comment.
-  This counts as one fix cycle. **After 3 cycles**, stop looping: label the PR
-  `ready-for-human` and hand it off with a summary of what remains.
+  This counts as one fix cycle. **At the orchestrator's configured cap
+  (`max_fix_cycles`, default 3)**, stop looping: label the PR `ready-for-human`
+  and hand it off with a summary of what remains.
 
 Emit the verdict in a form the orchestrator can parse, e.g.:
 
@@ -80,5 +81,6 @@ blocking:
 ## Done when
 
 You have emitted `CLEAN` (PR marked ready for human review, pipeline stopped) or
-`NEEDS_FIXES` (returned to implementer), or — at the 3-cycle cap — labeled the
-PR `ready-for-human` with a handoff summary.
+`NEEDS_FIXES` (returned to implementer), or — at the configured cycle cap
+(`max_fix_cycles`, default 3) — labeled the PR `ready-for-human` with a handoff
+summary.
