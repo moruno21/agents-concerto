@@ -98,6 +98,10 @@ Write `.agent-workspace/plan.md` with:
 Keep sub-tasks scoped to a single repo where possible (a cross-repo task
 becomes one sub-task per repo).
 
+`plan.md` is per-run local state (gitignored), not history to preserve — if one
+exists from a previous run, **overwrite it** for this run. Likewise each run
+gets its own `runs/<RUN_ID>/` directory, so events never mix across runs.
+
 ### 5. Run the pipeline in waves
 Do not run sub-tasks one-by-one in plan order. Schedule them by dependency:
 
@@ -161,6 +165,31 @@ concurrently with its wave-mates):
 When every sub-task has reached `CLEAN` (PR ready) or `ready-for-human`,
 generate the run summary with `scripts/run-log.sh <RUN_ID> summary` (see below),
 notify the human, and share the summary. Then **stop**. Do not merge anything.
+
+## What "draft PR" means (with or without a PR service)
+
+The workflow talks about draft PRs, `gh pr create --draft`, `gh pr comment`, and
+`ready-for-human` labels. That literal form applies **only when the repo has a
+GitHub/GitLab remote and the tracker is `github`/`gitlab`**. Detect this per repo
+before assuming a PR service exists.
+
+When there is **no PR service** (`tracker: none`, or a repo whose only remote is
+local/absent), do not fail and do not invent `gh` calls. Represent the draft PR
+by its durable parts instead:
+
+- The implementer commits and **pushes the feature branch** (to whatever
+  `origin` exists); that branch is the PR artifact.
+- The "PR body" and the reviewer's comment become text you record — in the
+  sub-task's run notes / the final summary — not a hosted comment.
+- The reviewer's **structured verdict** (`CLEAN` / `NEEDS_FIXES`) is always the
+  authoritative channel, independent of any PR service.
+- `CLEAN` (ready for human) and `ready-for-human` are **states you record in the
+  summary**, not labels on a hosted PR.
+- In the run log, `pr=` may be a branch reference (e.g. `branch:<name>@<sha>`)
+  when there is no URL.
+
+Either way the stop point is identical: a reviewed branch ready for the human,
+and **nothing merged**.
 
 ## Error handling
 
