@@ -54,10 +54,20 @@ If `config.md` is missing, stop and tell the human to create it from
 
 ## Workflow (run in order; do not skip steps)
 
-### 1. Load config
+### 1. Load config and open a run log
 Read `.agent-workspace/config.md`. Resolve the repo list, tracker, and branch/
 commit conventions. Validate every repo `path` exists. If anything is missing
 or ambiguous, stop and ask — do not assume.
+
+Pick a `RUN_ID` for this execution (a short timestamped slug, e.g.
+`2026-07-23-add-robots`). From here on, record every meaningful step with the
+structured logger so the run is traceable:
+
+```
+scripts/run-log.sh <RUN_ID> event subtask=<id> repo=<slug> agent=<name> phase=<phase> [model=..] [verdict=..] [cycle=N] [pr=..] [status=..]
+```
+
+Events append to `.agent-workspace/runs/<RUN_ID>/events.jsonl`.
 
 ### 2. Read the task
 Fetch the task from the tracker, or read `.agent-workspace/feature-request.md`.
@@ -81,7 +91,7 @@ For each sub-task (respecting `Blocked by` ordering — dependents wait):
 
   **5a. Dispatch (model selection).** Launch the `dispatcher` on the sub-task.
   It returns a tier: `trivial|standard` → **sonnet**, `complex` → **opus**.
-  Record the tier.
+  Record the tier. Log: `agent=dispatcher phase=dispatch model=<sonnet|opus>`.
 
   **5b. Create the worktree.** Run `scripts/worktree-create.sh` to make an
   isolated worktree for this sub-task/repo on a fresh branch named per
@@ -92,24 +102,28 @@ For each sub-task (respecting `Blocked by` ordering — dependents wait):
   **5c. Implement.** Launch the `implementer` in that worktree, **overriding
   its model** with the dispatcher's tier. It follows TDD where tests exist and
   Tidy First (a structural commit, then a behavioral commit), and opens a
-  **draft PR**. It never marks the PR ready and never merges.
+  **draft PR**. It never marks the PR ready and never merges. Log:
+  `agent=implementer phase=pr_opened pr=<url>`.
 
   **5d. Review.** Launch the `reviewer` on the draft PR. It posts inline
   comments and emits `CLEAN` or `NEEDS_FIXES`. A PR that mixes structural and
-  behavioral changes in one commit is always `NEEDS_FIXES`.
+  behavioral changes in one commit is always `NEEDS_FIXES`. Log:
+  `agent=reviewer verdict=<CLEAN|NEEDS_FIXES> cycle=<n>`.
 
   **5e. Fix loop (cap 3).** While the verdict is `NEEDS_FIXES` and fewer than
   3 cycles have run: hand the reviewer's comments back to the `implementer` in
-  the same worktree, then re-review. Count each round.
+  the same worktree, then re-review. Count each round (log each review verdict
+  with its `cycle`).
   - On `CLEAN`: the PR is ready for human review. Stop this sub-task. Do not
-    merge.
+    merge. Log: `status=clean`.
   - After the 3rd cycle without `CLEAN`: stop looping, label the PR
-    `ready-for-human`, and record the escalation.
+    `ready-for-human`, and record the escalation. Log:
+    `phase=escalate status=ready-for-human`.
 
 ### 6. Notify
-When every sub-task has reached `CLEAN` (PR ready) or `ready-for-human`, write
-a run summary (see below) and notify the human. Then **stop**. Do not merge
-anything.
+When every sub-task has reached `CLEAN` (PR ready) or `ready-for-human`,
+generate the run summary with `scripts/run-log.sh <RUN_ID> summary` (see below),
+notify the human, and share the summary. Then **stop**. Do not merge anything.
 
 ## Error handling
 
@@ -131,13 +145,25 @@ Read from `config.md`. Sensible defaults if unset:
 - Commits: the implementer's structural-then-behavioral pair, each a clear
   message; no mixing.
 
-## Run summary (what you output at the end)
+## Observability & run summary
 
-- Per affected repo: the draft PR (link/number) and its final state
-  (`ready for human review` or `ready-for-human` escalation).
-- Fix cycles used per sub-task.
-- Count of sub-tasks completed vs escalated.
-- A reminder that a team of agents costs roughly 4–6× a single session.
+Every run is traceable from its structured event log. Because you log each step
+(5a–5e) as it happens, the run reconstructs itself without you having to
+remember it.
+
+- **Event log**: `.agent-workspace/runs/<RUN_ID>/events.jsonl` — one JSON line
+  per step (dispatch, pr_opened, each review verdict + cycle, escalation).
+- **Summary**: at step 6, run `scripts/run-log.sh <RUN_ID> summary`. It writes
+  and prints `.agent-workspace/runs/<RUN_ID>/summary.md` containing:
+  - counts: sub-tasks, draft PRs opened, total fix cycles, completed
+    (reviewed `CLEAN`), escalated (`ready-for-human`);
+  - a per-sub-task table (repo, model, fix cycles, status, PR);
+  - a **cost reminder** that a team of agents costs roughly 4–6× a single
+    session — factor that multiple into usage;
+  - the human-merge stop point.
+
+Share this summary with the human as the run's final output. `runs/` is
+gitignored — it is local run state, not committed.
 
 ## The stop point (say it plainly)
 
