@@ -1,7 +1,8 @@
 # Local orchestrator config (never commit the real one)
 .agent-workspace/config.md
 
-# Runtime state written by the orchestrator (plan, notes, reviews, logs)
+# Runtime state written by the orchestrator (task input, plan, notes, reviews, logs)
+.agent-workspace/feature-request.md
 .agent-workspace/plan.md
 .agent-workspace/reviews/
 .agent-workspace/notes/

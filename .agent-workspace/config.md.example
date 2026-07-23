@@ -1,6 +1,39 @@
-# config.md.example
+# Orchestrator config
 
-> Placeholder. Filled in Phase 3: target repo list (paths + start command + slug),
-> tracker (github|gitlab|none), and branch/commit conventions.
->
-> Copy to `.agent-workspace/config.md` (gitignored) and edit locally.
+Copy this file to `.agent-workspace/config.md` and edit it for your project.
+`config.md` is gitignored; this `.example` is the committed template.
+
+## Target repos
+
+Every repo the orchestrator may work on. Add one block per repo. The number of
+repos is just the length of this list — one repo or N repos is the same code
+path to the pipeline.
+
+```yaml
+repos:
+  - slug: example-api
+    path: /absolute/path/to/example-api
+    start: npm run dev
+  - slug: example-web
+    path: /absolute/path/to/example-web
+    start: npm run dev
+```
+
+## Tracker
+
+Where tasks come from. One of `github`, `gitlab`, or `none`.
+
+- `github` / `gitlab`: the orchestrator reads the task from an issue/ticket.
+- `none`: the orchestrator reads the task from
+  `.agent-workspace/feature-request.md`.
+
+```yaml
+tracker: none
+```
+
+## Conventions
+
+```yaml
+branch_convention: "feat/<task>-<repo-slug>"
+base_branch: main
+```
