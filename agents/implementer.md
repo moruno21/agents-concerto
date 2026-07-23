@@ -17,7 +17,7 @@ orchestrator when it launches you (this file's `model:` is only the default).
 - The sub-task description and its acceptance criteria.
 - The target repo (slug + path) and the **worktree** already created for you.
   You work only inside that worktree — never in the human's checkout.
-- On a fix cycle: the reviewer's `NEEDS_FIXES` verdict and inline comments.
+- On a fix cycle: the reviewer's `NEEDS_FIXES` verdict and review comment.
 
 ## Behavior
 

@@ -133,9 +133,10 @@ concurrently with its wave-mates):
   **draft PR**. It never marks the PR ready and never merges. Log:
   `agent=implementer phase=pr_opened pr=<url>`.
 
-  **5d. Review.** Launch the `reviewer` on the draft PR. It posts inline
-  comments and emits `CLEAN` or `NEEDS_FIXES`. A PR that mixes structural and
-  behavioral changes in one commit is always `NEEDS_FIXES`. Log:
+  **5d. Review.** Launch the `reviewer` on the draft PR. It posts a consolidated
+  review comment (via `gh pr comment`, citing `path:line`) and emits `CLEAN` or
+  `NEEDS_FIXES`. A PR that mixes structural and behavioral changes in one commit
+  is always `NEEDS_FIXES`. Log:
   `agent=reviewer verdict=<CLEAN|NEEDS_FIXES> cycle=<n>`.
 
   **5e. Fix loop (cap 3).** While the verdict is `NEEDS_FIXES` and fewer than
