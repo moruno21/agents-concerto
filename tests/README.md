@@ -18,7 +18,7 @@ tests/run-tests.sh
 Exits non-zero if any check fails. It covers:
 
 - **Scenario A accounting**: a first-try `CLEAN` event stream produces a summary
-  with 1 draft PR, 0 fix cycles, 1 completed, 0 escalated.
+  with 1 PR, 0 fix cycles, 1 completed, 0 escalated.
 - **Scenario B accounting**: a `NEEDS_FIXES × 3` + escalation event stream
   produces 3 fix cycles, 0 completed, 1 escalated, and the cost reminder.
 - **Worktree isolation**: `worktree-create.sh` yields a *linked* worktree
@@ -57,7 +57,7 @@ cp tests/fixtures/scenario-a/feature-request.md .agent-workspace/feature-request
 Run the pipeline (standalone: ask the orchestrator to run the task; plugin:
 `/agents-concerto:run add a CHANGELOG.md`).
 
-**Expected outcome**: the reviewer returns `CLEAN` on cycle 1; a draft PR/branch
+**Expected outcome**: the reviewer returns `CLEAN` on cycle 1; an open PR/branch
 is produced; nothing is merged. Verify with the run summary:
 
 ```bash

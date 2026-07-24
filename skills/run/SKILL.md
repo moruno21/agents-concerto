@@ -1,6 +1,6 @@
 ---
 name: run
-description: Run the agents-concerto multi-agent development pipeline for a task — classify by complexity, implement in isolated worktrees (TDD + Tidy First), review under a two-party boundary, and stop at draft PRs for human merge. Invoke explicitly with a task description.
+description: Run the agents-concerto multi-agent development pipeline for a task — classify by complexity, implement in isolated worktrees (TDD + Tidy First), review under a two-party boundary, and stop at open PRs for human merge. Invoke explicitly with a task description.
 disable-model-invocation: true
 ---
 

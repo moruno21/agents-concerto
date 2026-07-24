@@ -71,7 +71,7 @@ L = []
 L.append("# Run summary — " + os.environ["RUN_ID"])
 L.append("")
 L.append("- Sub-tasks: %d" % len(subtasks))
-L.append("- Draft PRs opened: %d" % prs)
+L.append("- PRs opened: %d" % prs)
 L.append("- Total fix cycles: %d" % total_cycles)
 L.append("- Completed (reviewed CLEAN): %d" % completed)
 L.append("- Escalated (ready-for-human): %d" % escalated)

@@ -5,8 +5,8 @@ human keeps the baton (reviews and merges).
 
 A task is classified by complexity, implemented in an isolated git worktree
 following **TDD + Tidy First**, reviewed under a **two-party boundary** (whoever
-writes code never approves or merges), and the pipeline **stops at a draft PR**.
-The human reviews and merges by hand. It is agnostic to the number of target
+writes code never approves or merges), and the pipeline **stops at an open PR
+ready for review**. The human reviews and merges by hand. It is agnostic to the number of target
 repos: that is just a list in local config.
 
 ## Two ways to use it

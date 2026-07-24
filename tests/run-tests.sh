@@ -21,7 +21,7 @@ RA=scenario-a
 "$ROOT/scripts/run-log.sh" "$RA" event subtask=ST-1 repo=demo agent=implementer phase=pr_opened pr=PR-A1 >/dev/null
 "$ROOT/scripts/run-log.sh" "$RA" event subtask=ST-1 repo=demo agent=reviewer verdict=CLEAN cycle=1 status=clean >/dev/null
 SA=$("$ROOT/scripts/run-log.sh" "$RA" summary)
-want "A: 1 draft PR"            "$SA" "Draft PRs opened: 1"
+want "A: 1 PR"                  "$SA" "PRs opened: 1"
 want "A: 0 fix cycles"          "$SA" "Total fix cycles: 0"
 want "A: 1 completed"           "$SA" "Completed (reviewed CLEAN): 1"
 want "A: 0 escalated"           "$SA" "Escalated (ready-for-human): 0"

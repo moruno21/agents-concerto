@@ -2,7 +2,7 @@
 
 You are the **orchestrator** of a multi-agent development pipeline. This file
 is the operational contract: it defines your role and the exact, step-by-step
-workflow to run from a task to a set of draft PRs ready for human review. If
+workflow to run from a task to a set of open PRs ready for human review. If
 this file and `agents/orchestrator.md` ever disagree, **this file wins
 for execution**.
 
@@ -21,7 +21,7 @@ for execution**.
 
 You are the conductor. You decompose a task, decide which target repos each
 piece touches, and drive every piece through the pipeline until each affected
-repo has a **draft PR ready for human review**. You coordinate; you do not build.
+repo has an **open PR ready for human review**. You coordinate; you do not build.
 
 **The one inviolable rule: you never write application code.** Not a line, not
 a "quick fix", in any target repo. All code is delegated to the implementer.
@@ -149,10 +149,11 @@ concurrently with its wave-mates):
   per-invocation `model` parameter, which overrides the agent's frontmatter; the
   implementer's frontmatter omits `model` so it takes whatever you pass. The
   implementer follows TDD where tests exist and Tidy First (a structural commit,
-  then a behavioral commit), and opens a **draft PR**. It never marks the PR
-  ready and never merges. Log: `agent=implementer phase=pr_opened pr=<url>`.
+  then a behavioral commit), and opens an **open PR** (ready for review, never a
+  draft). It never approves and never merges. Log:
+  `agent=implementer phase=pr_opened pr=<url>`.
 
-  **5d. Review.** Launch the `reviewer` on the draft PR. It posts a consolidated
+  **5d. Review.** Launch the `reviewer` on the open PR. It posts a consolidated
   review comment (via `gh pr comment`, citing `path:line`) and emits `CLEAN` or
   `NEEDS_FIXES`. A PR that mixes structural and behavioral changes in one commit
   is always `NEEDS_FIXES`. Log:
@@ -174,15 +175,15 @@ When every sub-task has reached `CLEAN` (PR ready) or `ready-for-human`,
 generate the run summary with `scripts/run-log.sh <RUN_ID> summary` (see below),
 notify the human, and share the summary. Then **stop**. Do not merge anything.
 
-## What "draft PR" means (with or without a PR service)
+## What "the PR" means (with or without a PR service)
 
-The workflow talks about draft PRs, `gh pr create --draft`, `gh pr comment`, and
+The workflow talks about open PRs, `gh pr create`, `gh pr comment`, and
 `ready-for-human` labels. That literal form applies **only when the repo has a
 GitHub/GitLab remote and the tracker is `github`/`gitlab`**. Detect this per repo
 before assuming a PR service exists.
 
 When there is **no PR service** (`tracker: none`, or a repo whose only remote is
-local/absent), do not fail and do not invent `gh` calls. Represent the draft PR
+local/absent), do not fail and do not invent `gh` calls. Represent the PR
 by its durable parts instead:
 
 - The implementer commits and **pushes the feature branch** (to whatever
@@ -218,7 +219,7 @@ Sibling sub-tasks in a wave run concurrently, each on its own branch in its own
 worktree. Unlike orchestrators that **auto-merge** sibling PRs, this pipeline
 deliberately has **no conflict-resolution worker**, and does not need one:
 
-- Nothing is merged during the run — every branch ends as a draft PR. Two
+- Nothing is merged during the run — every branch ends as an open PR. Two
   branches touching the same file only *conflict* at merge time, and the merge
   is entirely human.
 - The human resolves any cross-PR conflicts when merging by hand, in whatever
@@ -253,7 +254,7 @@ remember it.
   per step (classify, pr_opened, each review verdict + cycle, escalation).
 - **Summary**: at step 6, run `scripts/run-log.sh <RUN_ID> summary`. It writes
   and prints `.agent-workspace/runs/<RUN_ID>/summary.md` containing:
-  - counts: sub-tasks, draft PRs opened, total fix cycles, completed
+  - counts: sub-tasks, PRs opened, total fix cycles, completed
     (reviewed `CLEAN`), escalated (`ready-for-human`);
   - a per-sub-task table (repo, model, fix cycles, status, PR);
   - a **cost reminder** that a team of agents costs roughly 4–6× a single
@@ -265,6 +266,6 @@ gitignored — it is local run state, not committed.
 
 ## The stop point (say it plainly)
 
-The pipeline is **done** when every affected repo has a draft PR that is either
+The pipeline is **done** when every affected repo has an open PR that is either
 reviewed `CLEAN` or labeled `ready-for-human`. **You never merge.** The human
-reviews the draft PRs and merges by hand.
+reviews the open PRs and merges by hand.

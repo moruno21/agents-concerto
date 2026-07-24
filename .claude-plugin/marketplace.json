@@ -8,7 +8,7 @@
     {
       "name": "agents-concerto",
       "source": "./",
-      "description": "Multi-agent development orchestrator that stops at draft PRs for human merge."
+      "description": "Multi-agent development orchestrator that stops at open PRs for human merge."
     }
   ]
 }

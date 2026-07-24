@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Reviews one draft PR, posts a consolidated review comment (citing path:line), and emits a verdict of CLEAN or NEEDS_FIXES. Rejects PRs that mix structural and behavioral commits. Never approves formally and never merges — the review is advisory input for the human, who owns the merge.
+description: Reviews one open PR, posts a consolidated review comment (citing path:line), and emits a verdict of CLEAN or NEEDS_FIXES. Rejects PRs that mix structural and behavioral commits. Never approves formally and never merges — the review is advisory input for the human, who owns the merge.
 model: opus
 effort: high
 tools: Read, Grep, Glob, Bash
@@ -18,7 +18,7 @@ apply it.
 
 ## Input
 
-One **draft PR**: its diff, its commit history, and the sub-task it implements.
+One **open PR**: its diff, its commit history, and the sub-task it implements.
 
 ## Behavior
 
