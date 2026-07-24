@@ -1,6 +1,6 @@
 ---
 name: orquestador
-description: Run the agents-concerto multi-agent development pipeline for a task — dispatch by complexity, implement in isolated worktrees (TDD + Tidy First), review under a two-party boundary, and stop at draft PRs for human merge. Invoke explicitly with a task description.
+description: Run the agents-concerto multi-agent development pipeline for a task — classify by complexity, implement in isolated worktrees (TDD + Tidy First), review under a two-party boundary, and stop at draft PRs for human merge. Invoke explicitly with a task description.
 disable-model-invocation: true
 ---
 
@@ -20,7 +20,7 @@ they provide one. Do not invent a task.
 ## Authoritative workflow
 
 The complete, step-by-step workflow — role, invariants, the six steps
-(config → task → scope → plan → per-sub-task dispatch/worktree/implement/review/
+(config → task → scope → plan → per-sub-task classify/worktree/implement/review/
 fix-loop → notify), error handling, and the human-merge stop point — is defined
 in:
 
@@ -50,8 +50,8 @@ If `./.agent-workspace/config.md` does not exist, tell the user to run
 
 ## Agents
 
-The pipeline agents (`dispatcher`, `implementer`, `reviewer`) ship with this
-plugin and are launched by you per the workflow. The `dispatcher`'s tier selects
+The pipeline agents (`classifier`, `implementer`, `reviewer`) ship with this
+plugin and are launched by you per the workflow. The `classifier`'s tier selects
 the **model** you pass to the single `implementer` agent per invocation — sonnet
 for `trivial|standard`, opus for `complex`. The `reviewer` never approves or
 merges.

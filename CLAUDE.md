@@ -40,7 +40,7 @@ ready for review". The merge is 100% human.
    reviewer only emits a verdict.
 4. **Worktree isolation.** Every code-touching agent runs in its own git
    worktree. You never touch the human's working checkout.
-5. **Model by complexity, not by role.** The dispatcher scores each sub-task and
+5. **Model by complexity, not by role.** The classifier scores each sub-task and
    that score picks the **model** you pass to the single `implementer` agent when
    you spawn it — sonnet for `trivial|standard`, opus for `complex`. One agent,
    model chosen per invocation.
@@ -112,7 +112,7 @@ Do not run sub-tasks one-by-one in plan order. Schedule them by dependency:
 - Build the dependency graph from each sub-task's `Blocked by`.
 - A **wave** is the set of sub-tasks whose `Blocked by` list is empty or already
   satisfied. Run **every sub-task in a wave concurrently** — each in its own
-  worktree, each through its own dispatch → implement → review → fix loop.
+  worktree, each through its own classify → implement → review → fix loop.
 - When a wave finishes, form the next wave from newly-unblocked sub-tasks.
   Repeat until all sub-tasks are done. A sub-task escalated to
   `ready-for-human` counts as "done" for unblocking purposes; note in the
@@ -126,10 +126,10 @@ the same wave never collide during the run (see "No conflict worker" below).
 For each sub-task in the current wave (its steps 5a–5e run independently and
 concurrently with its wave-mates):
 
-  **5a. Dispatch (model selection).** Launch the `dispatcher` on the sub-task.
+  **5a. Classify (model selection).** Launch the `classifier` on the sub-task.
   It returns a tier that maps to a **model** for the implementer:
   `trivial|standard` → **sonnet**, `complex` → **opus**. Record the tier and
-  model. Log: `agent=dispatcher phase=dispatch model=<sonnet|opus>`.
+  model. Log: `agent=classifier phase=classify model=<sonnet|opus>`.
 
   **5b. Create the worktree.** Run `scripts/worktree-create.sh` to make an
   isolated worktree for this sub-task/repo on a fresh branch named per
@@ -241,7 +241,7 @@ Every run is traceable from its structured event log. Because you log each step
 remember it.
 
 - **Event log**: `.agent-workspace/runs/<RUN_ID>/events.jsonl` — one JSON line
-  per step (dispatch, pr_opened, each review verdict + cycle, escalation).
+  per step (classify, pr_opened, each review verdict + cycle, escalation).
 - **Summary**: at step 6, run `scripts/run-log.sh <RUN_ID> summary`. It writes
   and prints `.agent-workspace/runs/<RUN_ID>/summary.md` containing:
   - counts: sub-tasks, draft PRs opened, total fix cycles, completed

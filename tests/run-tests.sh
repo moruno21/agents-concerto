@@ -17,7 +17,7 @@ export AGENT_WORKSPACE="$TMP/ws"
 
 echo "Scenario A — clean on first attempt (CLEAN)"
 RA=scenario-a
-"$ROOT/scripts/run-log.sh" "$RA" event subtask=ST-1 repo=demo agent=dispatcher model=sonnet phase=dispatch >/dev/null
+"$ROOT/scripts/run-log.sh" "$RA" event subtask=ST-1 repo=demo agent=classifier model=sonnet phase=classify >/dev/null
 "$ROOT/scripts/run-log.sh" "$RA" event subtask=ST-1 repo=demo agent=implementer phase=pr_opened pr=PR-A1 >/dev/null
 "$ROOT/scripts/run-log.sh" "$RA" event subtask=ST-1 repo=demo agent=reviewer verdict=CLEAN cycle=1 status=clean >/dev/null
 SA=$("$ROOT/scripts/run-log.sh" "$RA" summary)
@@ -28,7 +28,7 @@ want "A: 0 escalated"           "$SA" "Escalated (ready-for-human): 0"
 
 echo "Scenario B — exhaust 3 fix cycles then escalate (ready-for-human)"
 RB=scenario-b
-"$ROOT/scripts/run-log.sh" "$RB" event subtask=ST-1 repo=demo agent=dispatcher model=opus phase=dispatch >/dev/null
+"$ROOT/scripts/run-log.sh" "$RB" event subtask=ST-1 repo=demo agent=classifier model=opus phase=classify >/dev/null
 "$ROOT/scripts/run-log.sh" "$RB" event subtask=ST-1 repo=demo agent=implementer phase=pr_opened pr=PR-B1 >/dev/null
 "$ROOT/scripts/run-log.sh" "$RB" event subtask=ST-1 repo=demo agent=reviewer verdict=NEEDS_FIXES cycle=1 >/dev/null
 "$ROOT/scripts/run-log.sh" "$RB" event subtask=ST-1 repo=demo agent=reviewer verdict=NEEDS_FIXES cycle=2 >/dev/null
@@ -79,7 +79,7 @@ import json, sys
 json.load(open(sys.argv[1]))
 PY
 then ok "plugin.json is valid JSON"; else no "plugin.json invalid"; fi
-for a in orchestrator dispatcher reviewer implementer; do
+for a in orchestrator classifier reviewer implementer; do
   if [ -f "$ROOT/agents/$a.md" ]; then ok "agent present: $a"; else no "agent missing: $a"; fi
 done
 if [ ! -f "$ROOT/agents/implementer-standard.md" ] && [ ! -f "$ROOT/agents/implementer-complex.md" ]; then
@@ -92,10 +92,10 @@ if grep -qE "^model:" "$ROOT/agents/implementer.md"; then
 else
   ok "implementer omits frontmatter model (per-invocation override)"
 fi
-if grep -q "sonnet" "$ROOT/agents/dispatcher.md" && grep -q "opus" "$ROOT/agents/dispatcher.md"; then
-  ok "dispatcher maps tiers to models (sonnet/opus)"
+if grep -q "sonnet" "$ROOT/agents/classifier.md" && grep -q "opus" "$ROOT/agents/classifier.md"; then
+  ok "classifier maps tiers to models (sonnet/opus)"
 else
-  no "dispatcher no longer maps tiers to models"
+  no "classifier no longer maps tiers to models"
 fi
 
 echo ""

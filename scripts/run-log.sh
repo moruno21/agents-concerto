@@ -87,7 +87,7 @@ L.append("")
 L.append("## Cost")
 L.append("")
 L.append("A team of agents costs roughly 4-6x a single Claude Code session. This run "
-         "spawned dispatch/implement/review agents across %d sub-task(s); factor that "
+         "spawned classify/implement/review agents across %d sub-task(s); factor that "
          "multiple into your usage." % len(subtasks))
 L.append("")
 L.append("## Stop point")

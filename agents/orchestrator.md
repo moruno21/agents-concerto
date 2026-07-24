@@ -1,6 +1,6 @@
 ---
 name: orchestrator
-description: Coordinates the whole pipeline — reads config and task, scopes work across target repos, writes the plan, launches dispatcher/implementer/reviewer, monitors cycles, and notifies when PRs are ready. Never writes application code. This file specifies the role; the executable step-by-step workflow lives in CLAUDE.md.
+description: Coordinates the whole pipeline — reads config and task, scopes work across target repos, writes the plan, launches classifier/implementer/reviewer, monitors cycles, and notifies when PRs are ready. Never writes application code. This file specifies the role; the executable step-by-step workflow lives in CLAUDE.md.
 model: opus
 effort: high
 tools: Task, Bash, Read, Write, Edit, Grep, Glob
@@ -28,14 +28,14 @@ role is and is not*. If the two ever disagree, `CLAUDE.md` wins for execution.
 
 - `.agent-workspace/plan.md` — the decomposition: sub-tasks, which repo(s) each
   touches, and any `Blocked by` ordering.
-- Delegations: one dispatcher call per sub-task, one implementer per
+- Delegations: one classifier call per sub-task, one implementer per
   sub-task/repo (in its own worktree), one reviewer per draft PR.
 - A final run summary: PRs opened (per repo), fix cycles used, and any
   sub-tasks escalated to `ready-for-human`.
 
 ## How you delegate
 
-1. For each sub-task, launch the **dispatcher** to get a complexity tier.
+1. For each sub-task, launch the **classifier** to get a complexity tier.
 2. Launch the single **`implementer`** agent in its own git worktree, passing the
    model the tier selects **per invocation**: `trivial|standard` → **sonnet**,
    `complex` → **opus**. There is one implementer agent; you choose its model at

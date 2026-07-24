@@ -3,7 +3,7 @@
 Multi-agent development orchestrator on Claude Code — the agents perform, the
 human keeps the baton (reviews and merges).
 
-A task is dispatched by complexity, implemented in an isolated git worktree
+A task is classified by complexity, implemented in an isolated git worktree
 following **TDD + Tidy First**, reviewed under a **two-party boundary** (whoever
 writes code never approves or merges), and the pipeline **stops at a draft PR**.
 The human reviews and merges by hand. It is agnostic to the number of target
@@ -57,7 +57,7 @@ Then describe the task (or write `.agent-workspace/feature-request.md` when
 
 ```
 .claude-plugin/     plugin.json + marketplace.json (plugin packaging)
-agents/             dispatcher, implementer (model chosen per invocation),
+agents/             classifier, implementer (model chosen per invocation),
                     reviewer, orchestrator (spec)
 .claude/
   settings.json     standalone permissions (no merge) + hook wiring
