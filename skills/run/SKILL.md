@@ -15,7 +15,10 @@ role fully and run the end-to-end workflow for the task below. You coordinate;
 $ARGUMENTS
 
 If the task above is empty, ask the user for a task description and stop until
-they provide one. Do not invent a task.
+they provide one. Do not invent a task. If the user has only a rough idea rather
+than a well-formed task, suggest `/agents-concerto:shape <idea>` first — it
+writes a `feature-request.md` with testable acceptance criteria for `/run` to
+consume.
 
 ## Authoritative workflow
 

@@ -62,6 +62,7 @@ agents/             classifier, implementer (model chosen per invocation),
 .claude/
   settings.json     standalone permissions (no merge)
 skills/
+  shape/            /shape — turn a rough idea into a runnable task file
   run/              /run — run the pipeline for a task
   setup/            /setup — bootstrap a project's local config
 scripts/            worktree-create / worktree-cleanup / run-log / agent-report

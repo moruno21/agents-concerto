@@ -37,6 +37,8 @@ only **local** project config; the orchestrator logic stays in the plugin.
 
 5. Point them at the next step: run
    `/agents-concerto:run <task description>` (or, with `tracker: none`,
-   write `./.agent-workspace/feature-request.md` first).
+   write `./.agent-workspace/feature-request.md` first — run
+   `/agents-concerto:shape <rough idea>` to generate it with testable
+   acceptance criteria).
 
 Do not run the pipeline from here — `/setup` only prepares config.
