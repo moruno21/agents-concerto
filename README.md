@@ -64,7 +64,7 @@ agents/             classifier, implementer (model chosen per invocation),
 skills/
   run/              /run — run the pipeline for a task
   setup/            /setup — bootstrap a project's local config
-scripts/            worktree-create / worktree-cleanup / run-log
+scripts/            worktree-create / worktree-cleanup / run-log / agent-report
 CLAUDE.md           the workflow — single source of truth (both modes)
 .agent-workspace/   local config + runtime (gitignored); .example is the template
 ```
@@ -81,3 +81,22 @@ complexity; **stop at "PR ready"** (no auto-merge); a finite review→fix cap
 A team of agents costs roughly 4–6× a single Claude Code session. Every run
 writes a summary (`.agent-workspace/runs/<id>/summary.md`) with that reminder
 plus counts of PRs, fix cycles, and escalations.
+
+For a per-agent breakdown, run:
+
+```bash
+scripts/agent-report.sh
+```
+
+It reads the current Claude Code session transcript and prints one table per
+run: **what each agent did** (files touched, commands, agents coordinated) and
+**its token usage plus an API-rate cost reference**. It separates the
+orchestrator's own turns from each subagent (`classifier` / `implementer` /
+`reviewer`), prices each by model with the three cache tiers, and needs no
+`run-log` correlation — the transcript is the single source of truth. Pass a
+transcript path as the first argument to report on a different session.
+
+The `$` column is a reference at API rates, **not a charge** — under a Claude
+subscription you are not billed per token, so treat it as the token-cost
+equivalent (useful for comparing runs or deciding whether a workload belongs on
+the pay-per-token API). The editable price table lives at the top of the script.
