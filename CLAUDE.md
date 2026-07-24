@@ -59,8 +59,10 @@ ready for review". The merge is 100% human.
     `test` command (bounded; runs the suite and exits non-zero on failure).
   - `tracker`: `github` | `gitlab` | `none`.
   - `branch_convention` (default `feat/<task>-<repo-slug>`),
-    `commit_convention` (default `conventional` — Conventional Commits;
-    `default` for free-form messages), and `max_fix_cycles` (default `3`).
+    `base_branch` (the ref new branches are cut from; when unset, each repo's
+    current `HEAD`), `commit_convention` (default `conventional` — Conventional
+    Commits; `default` for free-form messages), and `max_fix_cycles`
+    (default `3`).
 - **The task**, obtained from:
   - the configured `tracker` (an issue/ticket), or
   - `.agent-workspace/feature-request.md` when `tracker: none`.
@@ -131,11 +133,15 @@ concurrently with its wave-mates):
   `trivial|standard` → **sonnet**, `complex` → **opus**. Record the tier and
   model. Log: `agent=classifier phase=classify model=<sonnet|opus>`.
 
-  **5b. Create the worktree.** Run `scripts/worktree-create.sh` to make an
-  isolated worktree for this sub-task/repo on a fresh branch named per
-  `branch_convention` (default `feat/<task>-<repo-slug>`). The script verifies
-  it is operating in a worktree and not the human's checkout; if it cannot
-  guarantee that, it aborts and so do you.
+  **5b. Create the worktree.** Run `scripts/worktree-create.sh <repo-path>
+  <branch> <base_branch>` to make an isolated worktree for this sub-task/repo on
+  a fresh branch named per `branch_convention` (default
+  `feat/<task>-<repo-slug>`). **Always pass `base_branch` from config as the
+  third argument** so the branch is cut from the intended base rather than
+  whatever the human happens to have checked out; only omit it when `config.md`
+  leaves `base_branch` unset, in which case the script falls back to the repo's
+  current `HEAD`. The script verifies it is operating in a worktree and not the
+  human's checkout; if it cannot guarantee that, it aborts and so do you.
 
   **5c. Implement.** Launch the single `implementer` agent in that worktree,
   passing the model the tier selected in 5a **per invocation** — sonnet for
@@ -226,6 +232,9 @@ merge-order decision.
 
 Read from `config.md`. Sensible defaults if unset:
 - Branch: `feat/<task>-<repo-slug>` (one branch per sub-task/repo).
+- Base branch: `base_branch` is the ref each feature branch is cut from; pass it
+  as the third argument to `worktree-create.sh`. Unset → the repo's current
+  `HEAD`.
 - Commits: the implementer's structural-then-behavioral pair, each a clear
   message; no mixing. `commit_convention` (default `conventional`) sets the
   message format: with `conventional`, the structural commit is `refactor:` and
