@@ -33,17 +33,5 @@
       "Bash(git push --force:*)",
       "Bash(git push -f:*)"
     ]
-  },
-  "hooks": {
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR/scripts/hooks/task-completed.sh\""
-          }
-        ]
-      }
-    ]
   }
 }

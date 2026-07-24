@@ -49,6 +49,11 @@ tracker: none
 Either way the structural/behavioral split is enforced; the convention only
 changes the message format, not the commit discipline.
 
+`base_branch` is the ref every feature branch is cut from (passed as the base
+to `worktree-create.sh`). Set it to the repo's integration branch (e.g. `main`
+or `master`). If you leave it unset, worktrees branch from whatever the repo has
+checked out at run time — which is rarely what you want, so set it explicitly.
+
 `max_fix_cycles` caps the review→fix loop per sub-task (default `3`). When the
 cap is hit without a `CLEAN` verdict, the sub-task is labeled `ready-for-human`
 and handed off. The **existence** of a finite cap with a human escape hatch is a

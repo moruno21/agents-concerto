@@ -13,7 +13,7 @@ repos: that is just a list in local config.
 
 ### A) As a plugin (recommended, reusable across projects)
 
-The reusable logic (agents, `/run` and `/setup` skills, hooks, scripts)
+The reusable logic (agents, `/run` and `/setup` skills, scripts)
 ships as a plugin; each project supplies its own local config.
 
 Install (from a remote git repo once this is pushed):
@@ -60,12 +60,11 @@ Then describe the task (or write `.agent-workspace/feature-request.md` when
 agents/             classifier, implementer (model chosen per invocation),
                     reviewer, orchestrator (spec)
 .claude/
-  settings.json     standalone permissions (no merge) + hook wiring
+  settings.json     standalone permissions (no merge)
 skills/
   run/              /run — run the pipeline for a task
   setup/            /setup — bootstrap a project's local config
-hooks/hooks.json    plugin hook wiring (task-completed gate)
-scripts/            worktree-create / worktree-cleanup / run-log / hooks
+scripts/            worktree-create / worktree-cleanup / run-log
 CLAUDE.md           the workflow — single source of truth (both modes)
 .agent-workspace/   local config + runtime (gitignored); .example is the template
 ```

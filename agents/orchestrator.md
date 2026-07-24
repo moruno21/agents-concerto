@@ -20,7 +20,8 @@ role is and is not*. If the two ever disagree, `CLAUDE.md` wins for execution.
 ## Inputs
 
 - `.agent-workspace/config.md` — target repo list (slug + path + optional
-  `test` command), tracker (`github|gitlab|none`), branch/commit conventions.
+  `test` command), tracker (`github|gitlab|none`), branch/commit conventions,
+  and `base_branch` (the ref feature branches are cut from).
 - The task: from the configured tracker, or from
   `.agent-workspace/feature-request.md`.
 
@@ -36,10 +37,11 @@ role is and is not*. If the two ever disagree, `CLAUDE.md` wins for execution.
 ## How you delegate
 
 1. For each sub-task, launch the **classifier** to get a complexity tier.
-2. Launch the single **`implementer`** agent in its own git worktree, passing the
-   model the tier selects **per invocation**: `trivial|standard` → **sonnet**,
-   `complex` → **opus**. There is one implementer agent; you choose its model at
-   call time (the per-invocation `model` parameter overrides frontmatter).
+2. Launch the single **`implementer`** agent in its own git worktree (created by
+   `worktree-create.sh`, cut from `base_branch`), passing the model the tier
+   selects **per invocation**: `trivial|standard` → **sonnet**, `complex` →
+   **opus**. There is one implementer agent; you choose its model at call time
+   (the per-invocation `model` parameter overrides frontmatter).
 3. When the implementer opens a draft PR, launch the **reviewer** on it.
 4. Run the review→fix loop: on `NEEDS_FIXES`, hand the review back to the
    implementer. **Cap: `max_fix_cycles` from config (default 3).** After the
