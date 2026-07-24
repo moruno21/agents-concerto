@@ -5,7 +5,7 @@ Two things are tested here:
 1. **Deterministic checks** (`run-tests.sh`) — the parts of the orchestrator that
    are *code*, so they are reproducible and CI-able.
 2. **End-to-end scenarios** (`fixtures/`) — the two required behavioral
-   scenarios, run through the real pipeline with `/orquestador`. These depend on
+   scenarios, run through the real pipeline with `/run`. These depend on
    an LLM, so they are steered by fixture design rather than being bit-for-bit
    deterministic.
 
@@ -55,7 +55,7 @@ cp tests/fixtures/scenario-a/feature-request.md .agent-workspace/feature-request
 ```
 
 Run the pipeline (standalone: ask the orchestrator to run the task; plugin:
-`/agents-concerto:orquestador add a CHANGELOG.md`).
+`/agents-concerto:run add a CHANGELOG.md`).
 
 **Expected outcome**: the reviewer returns `CLEAN` on cycle 1; a draft PR/branch
 is produced; nothing is merged. Verify with the run summary:

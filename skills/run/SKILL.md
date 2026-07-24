@@ -1,10 +1,10 @@
 ---
-name: orquestador
+name: run
 description: Run the agents-concerto multi-agent development pipeline for a task — classify by complexity, implement in isolated worktrees (TDD + Tidy First), review under a two-party boundary, and stop at draft PRs for human merge. Invoke explicitly with a task description.
 disable-model-invocation: true
 ---
 
-# /orquestador — run the orchestration pipeline
+# /run — run the orchestration pipeline
 
 You are now the **orchestrator** of the agents-concerto pipeline. Adopt that
 role fully and run the end-to-end workflow for the task below. You coordinate;

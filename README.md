@@ -13,7 +13,7 @@ repos: that is just a list in local config.
 
 ### A) As a plugin (recommended, reusable across projects)
 
-The reusable logic (agents, `/orquestador` and `/setup` skills, hooks, scripts)
+The reusable logic (agents, `/run` and `/setup` skills, hooks, scripts)
 ships as a plugin; each project supplies its own local config.
 
 Install (from a remote git repo once this is pushed):
@@ -34,10 +34,10 @@ Then, inside any project you want to orchestrate:
 
 ```
 /agents-concerto:setup
-/agents-concerto:orquestador <task description>
+/agents-concerto:run <task description>
 ```
 
-`/setup` scaffolds a local `./.agent-workspace/config.md`; `/orquestador` runs
+`/setup` scaffolds a local `./.agent-workspace/config.md`; `/run` runs
 the pipeline for the task.
 
 ### B) Standalone (open Claude in this repo)
@@ -62,7 +62,7 @@ agents/             classifier, implementer (model chosen per invocation),
 .claude/
   settings.json     standalone permissions (no merge) + hook wiring
 skills/
-  orquestador/      /orquestador — run the pipeline for a task
+  run/              /run — run the pipeline for a task
   setup/            /setup — bootstrap a project's local config
 hooks/hooks.json    plugin hook wiring (task-completed gate)
 scripts/            worktree-create / worktree-cleanup / run-log / hooks

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # /setup — bootstrap the orchestrator config for this project
 
-Prepare the current project to run `/agents-concerto:orquestador`. This creates
+Prepare the current project to run `/agents-concerto:run`. This creates
 only **local** project config; the orchestrator logic stays in the plugin.
 
 ## Steps
@@ -36,7 +36,7 @@ only **local** project config; the orchestrator logic stays in the plugin.
    project if they don't want them committed.
 
 5. Point them at the next step: run
-   `/agents-concerto:orquestador <task description>` (or, with `tracker: none`,
+   `/agents-concerto:run <task description>` (or, with `tracker: none`,
    write `./.agent-workspace/feature-request.md` first).
 
 Do not run the pipeline from here — `/setup` only prepares config.

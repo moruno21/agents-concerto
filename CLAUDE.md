@@ -8,7 +8,7 @@ for execution**.
 
 > **Where things live (two usage modes).** This file is the single source of
 > truth for the workflow whether you run it *standalone* (Claude opened in this
-> repo) or *installed as a plugin* (invoked via `/agents-concerto:orquestador`).
+> repo) or *installed as a plugin* (invoked via `/agents-concerto:run`).
 > Resolve paths accordingly:
 > - **Orchestrator root** (agents, scripts, this file): the repo root when
 >   standalone; `${CLAUDE_PLUGIN_ROOT}` when installed as a plugin. Every
