@@ -34,12 +34,19 @@ authoritative workflow, run this gate:
    questions, derive **testable** acceptance criteria, and flag any
    contradictions before proceeding. Show the user the resulting
    `## Task` + `## Acceptance criteria` and get their confirmation.
-   - When `tracker: none`, persist the shaped result to
-     `./.agent-workspace/feature-request.md` (the shape skill's output contract),
-     then continue with it.
-   - When `tracker: github`/`gitlab`, the workflow reads the task from an issue.
-     Use the shaped task for this run and offer the text for the user to paste
-     into an issue; do **not** create the issue yourself.
+   - **Always persist the shaped result to `./.agent-workspace/feature-request.md`**
+     (title + description + acceptance criteria — the shape skill's output
+     contract), regardless of tracker. This file is the run's canonical task
+     document: the artifact the user documents in their tracker (Jira, Linear,
+     etc.). Write it in every case.
+   - The MD is documentation, **not** the implementer's input — the implementer
+     still builds from the per-sub-task decomposition, not this file (see the
+     authoritative workflow). Do not change that.
+   - When `tracker: none`, the workflow also reads the task *from* this file.
+   - When `tracker: github`/`gitlab`, the workflow reads the task from an issue;
+     the MD you just wrote is a documentation/handoff artifact — offer its text
+     for the user to paste into an issue, but do **not** create the issue
+     yourself.
 
 4. **Only once the task is runnable (already well-formed, or freshly shaped and
    confirmed), proceed** to the workflow below.
