@@ -46,7 +46,7 @@ git init -b main "$SB" && (cd "$SB" && git commit --allow-empty -m init)
 ```
 
 Write `.agent-workspace/config.md` with a single repo whose `path` is `$SB`,
-`tracker: none`, and `base_branch: main`.
+`task_source: none`, and `base_branch: main`.
 
 ### Scenario A — expected: CLEAN on first attempt
 

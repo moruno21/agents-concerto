@@ -7,7 +7,8 @@ disable-model-invocation: true
 # /shape — turn an idea into a runnable task
 
 This is the **upstream** step of the pipeline. The orchestrator's `/run` starts
-from a *well-formed* task (a tracker issue, or `.agent-workspace/feature-request.md`).
+from a *well-formed* task (an issue/ticket named by `task_source`, or
+`.agent-workspace/feature-request.md`).
 Your job here is to produce that task — nothing more. You **do not** run the
 pipeline, spawn agents, write code, or create worktrees.
 
@@ -74,15 +75,16 @@ testable**, and to catch contradictions *before* a run is spent.
 
 5. **Hand off — do not run.** Tell the user the task is ready and point them at
    the next step:
-   - Default (`tracker: none`): `/agents-concerto:run <the task>`.
-   - If their `config.md` sets `tracker: github`/`gitlab`, `/run` reads the task
-     from an **issue**, not this file. In that case treat what you wrote as a
-     draft the user can paste into a new issue. **Do not create the issue
-     yourself** — that is a side effect the user should own.
+   - Default (`task_source: none`): `/agents-concerto:run <the task>`.
+   - If their `config.md` sets `task_source` to `github`/`gitlab`/`linear`/`jira`,
+     `/run` reads the task from an **issue/ticket** on that platform, not this
+     file. In that case treat what you wrote as a draft the user can paste into a
+     new ticket. **Do not create the ticket yourself** — that is a side effect
+     the user should own.
 
 ## Hard limits
 
 - You only write `./.agent-workspace/feature-request.md`. No code, no worktrees,
   no agents, no PRs, no merges.
-- Never create tracker issues, push branches, or run `/run` on the user's
-  behalf — shaping stops at a ready task file.
+- Never create tracker issues/tickets, push branches, or run `/run` on the
+  user's behalf — shaping stops at a ready task file.

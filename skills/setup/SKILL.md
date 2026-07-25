@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Bootstrap agents-concerto in the current project — create a local .agent-workspace/config.md from the shipped template and guide the user through declaring their target repos, tracker, and branch conventions.
+description: Bootstrap agents-concerto in the current project — create a local .agent-workspace/config.md from the shipped template and guide the user through declaring their target repos (with per-repo PR host), task_source, and branch conventions.
 disable-model-invocation: true
 ---
 
@@ -22,12 +22,17 @@ only **local** project config; the orchestrator logic stays in the plugin.
    ```
 
 3. Help the user fill `./.agent-workspace/config.md`:
-   - `repos`: one entry per target repo — `slug`, absolute `path`, and an
-     optional `test` command (bounded; runs the suite and exits non-zero on
-     failure). The pipeline is agnostic to the count; one repo or N is just a
-     longer list.
-   - `tracker`: `github`, `gitlab`, or `none`. If `none`, tasks are read from
-     `./.agent-workspace/feature-request.md`.
+   - `repos`: one entry per target repo — `slug`, absolute `path`, an optional
+     `test` command (bounded; runs the suite and exits non-zero on failure), and
+     an optional `host` (`github`/`gitlab`/`none` — **where PRs open for that
+     repo**; omit to auto-detect from its remote). The pipeline is agnostic to
+     the count; one repo or N is just a longer list.
+   - `task_source`: `none`, `github`, `gitlab`, `linear`, or `jira` — **where
+     tasks are read from**, a separate axis from `host`. `none` → the task is
+     supplied to `/run` (or read from `./.agent-workspace/feature-request.md`);
+     the others → read from an issue/ticket on that platform. Make the split
+     explicit to the user: reading from Linear/Jira and opening PRs on GitHub is
+     a valid combination.
    - `branch_convention` (default `feat/<task>-<repo-slug>`) and `base_branch`.
    Validate that every `repo.path` exists on disk; flag any that don't.
 
@@ -36,7 +41,7 @@ only **local** project config; the orchestrator logic stays in the plugin.
    project if they don't want them committed.
 
 5. Point them at the next step: run
-   `/agents-concerto:run <task description>` (or, with `tracker: none`,
+   `/agents-concerto:run <task description>` (or, with `task_source: none`,
    write `./.agent-workspace/feature-request.md` first — run
    `/agents-concerto:shape <rough idea>` to generate it with testable
    acceptance criteria).

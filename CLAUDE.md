@@ -55,17 +55,25 @@ ready for review". The merge is 100% human.
 
 - **`.agent-workspace/config.md`** — the project config (copied from
   `config.md.example`). It declares:
-  - `repos`: a list of target repos, each with `slug`, `path`, and an optional
-    `test` command (bounded; runs the suite and exits non-zero on failure).
-  - `tracker`: `github` | `gitlab` | `none`.
+  - `repos`: a list of target repos, each with `slug`, `path`, an optional
+    `test` command (bounded; runs the suite and exits non-zero on failure), and
+    an optional `host` (`github` | `gitlab` | `none`) — **where PRs are opened
+    for that repo** (the *implement* axis); omit to auto-detect from the repo's
+    git remote.
+  - `task_source`: `none` | `github` | `gitlab` | `linear` | `jira` — **where
+    tasks are read from** (the *read* axis), independent of `host`. These are two
+    separate axes: you may read from Linear and open PRs on GitHub in the same
+    run.
   - `branch_convention` (default `feat/<task>-<repo-slug>`),
     `base_branch` (the ref new branches are cut from; when unset, each repo's
     current `HEAD`), `commit_convention` (default `conventional` — Conventional
     Commits; `default` for free-form messages), and `max_fix_cycles`
     (default `3`).
-- **The task**, obtained from:
-  - the configured `tracker` (an issue/ticket), or
-  - `.agent-workspace/feature-request.md` when `tracker: none`.
+- **The task**, obtained per `task_source`:
+  - `github` / `gitlab` → an issue/ticket on that platform;
+  - `linear` / `jira` → an external ticket, fetched via that platform's MCP/CLI;
+  - `none` → supplied directly to `/run`, or read from
+    `.agent-workspace/feature-request.md`.
 
 If `config.md` is missing, stop and tell the human to create it from
 `config.md.example`. Do not guess config.
@@ -73,9 +81,10 @@ If `config.md` is missing, stop and tell the human to create it from
 ## Workflow (run in order; do not skip steps)
 
 ### 1. Load config and open a run log
-Read `.agent-workspace/config.md`. Resolve the repo list, tracker, and branch/
-commit conventions. Validate every repo `path` exists. If anything is missing
-or ambiguous, stop and ask — do not assume.
+Read `.agent-workspace/config.md`. Resolve the repo list (with each repo's
+`host`, or auto-detect it from the remote), the `task_source`, and branch/commit
+conventions. Validate every repo `path` exists. If anything is missing or
+ambiguous, stop and ask — do not assume.
 
 Pick a `RUN_ID` for this execution (a short timestamped slug, e.g.
 `2026-07-23-add-robots`). From here on, record every meaningful step with the
@@ -88,7 +97,10 @@ scripts/run-log.sh <RUN_ID> event subtask=<id> repo=<slug> agent=<name> phase=<p
 Events append to `.agent-workspace/runs/<RUN_ID>/events.jsonl`.
 
 ### 2. Read the task
-Fetch the task from the tracker, or read `.agent-workspace/feature-request.md`.
+Fetch the task per `task_source`: an issue on `github`/`gitlab`; an external
+ticket on `linear`/`jira` (via that platform's MCP/CLI); or, on `none`, the task
+supplied to `/run` or read from `.agent-workspace/feature-request.md`. Reading
+the task is independent of where it will be implemented (each repo's `host`).
 Restate the task and its acceptance criteria in your own words so the scope is
 explicit.
 
@@ -178,11 +190,13 @@ notify the human, and share the summary. Then **stop**. Do not merge anything.
 ## What "the PR" means (with or without a PR service)
 
 The workflow talks about open PRs, `gh pr create`, `gh pr comment`, and
-`ready-for-human` labels. That literal form applies **only when the repo has a
-GitHub/GitLab remote and the tracker is `github`/`gitlab`**. Detect this per repo
-before assuming a PR service exists.
+`ready-for-human` labels. That literal form applies **per repo, when that repo's
+`host` is `github`/`gitlab`** (declared in config, or auto-detected from its
+remote). The PR service is a property of *where you implement* (the repo's
+`host`), **not** of `task_source` — reading a task from Linear/Jira does not
+imply anything about where the PR is opened.
 
-When there is **no PR service** (`tracker: none`, or a repo whose only remote is
+When a repo has **no PR service** (`host: none`, or its only remote is
 local/absent), do not fail and do not invent `gh` calls. Represent the PR
 by its durable parts instead:
 

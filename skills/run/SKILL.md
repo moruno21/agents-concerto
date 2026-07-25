@@ -19,8 +19,12 @@ $ARGUMENTS
 Do **not** start the workflow with a vague task. Before reading config or the
 authoritative workflow, run this gate:
 
-1. **If the task above is empty**, ask the user to describe what they want in a
-   sentence or two, and wait. Do not invent a task.
+1. **Obtain the task per `task_source`.** If `task_source` is
+   `github`/`gitlab`/`linear`/`jira`, fetch the referenced issue/ticket (via that
+   platform's MCP/CLI). If `task_source: none`, use the description passed to
+   `/run`; if that is empty, ask the user to describe what they want in a
+   sentence or two, and wait. Do not invent a task. (Reading the task is a
+   separate axis from where it will be implemented — each repo's `host`.)
 
 2. **Assess whether the task is runnable.** A task is runnable only if it has a
    clear goal **and** acceptance criteria that a reviewer could check
@@ -36,17 +40,17 @@ authoritative workflow, run this gate:
    `## Task` + `## Acceptance criteria` and get their confirmation.
    - **Always persist the shaped result to `./.agent-workspace/feature-request.md`**
      (title + description + acceptance criteria — the shape skill's output
-     contract), regardless of tracker. This file is the run's canonical task
-     document: the artifact the user documents in their tracker (Jira, Linear,
-     etc.). Write it in every case.
+     contract), regardless of `task_source`. This file is the run's canonical
+     task document: the artifact the user documents in their tracker (Jira,
+     Linear, etc.). Write it in every case.
    - The MD is documentation, **not** the implementer's input — the implementer
      still builds from the per-sub-task decomposition, not this file (see the
      authoritative workflow). Do not change that.
-   - When `tracker: none`, the workflow also reads the task *from* this file.
-   - When `tracker: github`/`gitlab`, the workflow reads the task from an issue;
-     the MD you just wrote is a documentation/handoff artifact — offer its text
-     for the user to paste into an issue, but do **not** create the issue
-     yourself.
+   - When `task_source: none`, the workflow also reads the task *from* this file.
+   - When `task_source` is `github`/`gitlab`/`linear`/`jira`, the task came from
+     that external source; the MD you just wrote is a documentation/handoff
+     artifact — offer its text for the user to attach to the ticket, but do
+     **not** create or modify tickets yourself.
 
 4. **Only once the task is runnable (already well-formed, or freshly shaped and
    confirmed), proceed** to the workflow below.

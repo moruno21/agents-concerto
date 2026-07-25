@@ -48,7 +48,7 @@ Note: true line-anchored inline comments require `gh pr review`, which is
 approve). Do not attempt it; use `gh pr comment` with `path:line` references
 instead. Your authoritative output is the structured verdict below, which you
 return to the orchestrator regardless of whether a PR comment is posted (e.g.
-when the tracker is `none` and there is no PR service).
+when the repo's `host` is `none` and there is no PR service).
 
 ## Output
 

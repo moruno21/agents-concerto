@@ -20,10 +20,13 @@ role is and is not*. If the two ever disagree, `CLAUDE.md` wins for execution.
 ## Inputs
 
 - `.agent-workspace/config.md` — target repo list (slug + path + optional
-  `test` command), tracker (`github|gitlab|none`), branch/commit conventions,
-  and `base_branch` (the ref feature branches are cut from).
-- The task: from the configured tracker, or from
-  `.agent-workspace/feature-request.md`.
+  `test` command + optional `host` = where PRs open for that repo,
+  `github|gitlab|none`, auto-detected from the remote if omitted), `task_source`
+  (`none|github|gitlab|linear|jira`, where tasks are read from — a separate axis
+  from `host`), branch/commit conventions, and `base_branch` (the ref feature
+  branches are cut from).
+- The task: read per `task_source` — an issue/ticket (github/gitlab/linear/jira)
+  or, on `none`, supplied to `/run` or from `.agent-workspace/feature-request.md`.
 
 ## Outputs
 

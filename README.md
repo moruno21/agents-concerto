@@ -47,11 +47,11 @@ run a task:
 
 ```bash
 cp .agent-workspace/config.md.example .agent-workspace/config.md
-# edit config.md: repos, tracker, conventions
+# edit config.md: repos (+ per-repo PR host), task_source, conventions
 ```
 
 Then describe the task (or write `.agent-workspace/feature-request.md` when
-`tracker: none`) and let the orchestrator run the workflow.
+`task_source: none`) and let the orchestrator run the workflow.
 
 ## Layout
 

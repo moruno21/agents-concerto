@@ -9,31 +9,51 @@ Every repo the orchestrator may work on. Add one block per repo. The number of
 repos is just the length of this list — one repo or N repos is the same code
 path to the pipeline.
 
+**This is where code is implemented and PRs are opened** — the *implement* axis,
+kept separate from `task_source` (the *read* axis) below.
+
 `test` is optional: a bounded command that runs the repo's test suite and exits
 non-zero on failure (e.g. `npm test`, `pytest`). When present, the implementer
 runs it to verify before opening/updating a PR, and the reviewer may run it to
 confirm the suite is green. Omit it if the repo has no test suite.
 
+`host` is optional: where PRs are opened for **this** repo — `github`, `gitlab`,
+or `none` (branch-only: push the feature branch, record the verdict as text, no
+hosted PR). Omit it to **auto-detect** from the repo's git remote (a
+github.com/gitlab.com remote → that host; no usable remote → `none`). Because
+`host` is per-repo, different repos in the same run may live on different hosts.
+
 ```yaml
 repos:
   - slug: example-api
     path: /absolute/path/to/example-api
+    host: github          # optional; omit to auto-detect from the remote
     test: npm test
   - slug: example-web
     path: /absolute/path/to/example-web
     test: npm test
 ```
 
-## Tracker
+## Task source
 
-Where tasks come from. One of `github`, `gitlab`, or `none`.
+Where tasks are **read from** — a separate axis from where they are implemented
+(that is `host`, per repo, above). One of `none`, `github`, `gitlab`, `linear`,
+or `jira`.
 
-- `github` / `gitlab`: the orchestrator reads the task from an issue/ticket.
-- `none`: the orchestrator reads the task from
-  `.agent-workspace/feature-request.md`.
+- `none`: the task is supplied directly to `/agents-concerto:run` (or read from
+  `.agent-workspace/feature-request.md`). Nothing external is fetched.
+- `github` / `gitlab`: read the task from an issue on that platform.
+- `linear` / `jira`: read the task from that external tracker (via its MCP/CLI).
+
+Independent of the source, `/run` always applies the shaping gate — if the
+fetched or supplied task is underspecified it is shaped into a clear
+description + testable acceptance criteria first — and always writes the task MD
+to `.agent-workspace/feature-request.md` for your records. So you can read tasks
+from an external Linear/Jira **and** implement PRs on GitHub in the same run:
+`task_source: linear` with each repo's `host: github`.
 
 ```yaml
-tracker: none
+task_source: none
 ```
 
 ## Conventions
