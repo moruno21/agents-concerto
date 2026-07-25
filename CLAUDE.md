@@ -182,10 +182,28 @@ concurrently with its wave-mates):
     label the PR `ready-for-human`, and record the escalation. Log:
     `phase=escalate status=ready-for-human`.
 
+  **5f. Clean up the worktree (only after the sub-task is terminal).** Once — and
+  only once — this sub-task has reached a terminal state in 5e (`CLEAN` or
+  `ready-for-human`), remove its isolated worktree with
+  `scripts/worktree-cleanup.sh <repo-path> <branch>`. **Never run this during the
+  fix loop**: the implementer reuses the same worktree across fix cycles (5c/5e),
+  so cleaning up before the loop ends would break it. The cleanup only removes the
+  worktree directory and prunes — it does **not** delete the branch and does not
+  touch the human's main checkout — so the branch, its commits, and the PR remain
+  fully intact (the pushed branch is the durable artifact). Log:
+  `phase=worktree_cleanup status=removed`. If removal fails, do not block the run;
+  note the leftover worktree path in the summary so the human can remove it.
+
 ### 6. Notify
 When every sub-task has reached `CLEAN` (PR ready) or `ready-for-human`,
 generate the run summary with `scripts/run-log.sh <RUN_ID> summary` (see below),
 notify the human, and share the summary. Then **stop**. Do not merge anything.
+
+As a safety net, after every sub-task is terminal you may sweep any orphaned
+worktrees for each affected repo with `scripts/worktree-cleanup.sh <repo-path>
+--all` (it skips the main checkout and never deletes branches). Per-sub-task
+cleanup in 5f is the primary mechanism; this sweep only catches leftovers from a
+5f that failed. Pushed branches and open PRs are unaffected.
 
 ## What "the PR" means (with or without a PR service)
 
