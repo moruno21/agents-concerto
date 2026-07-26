@@ -2,14 +2,20 @@
 
 ## Task
 
-Add a root `CONSTANTS.md` to the target repo.
+As a maintainer, I want a `CONSTANTS.md` documenting a project constant, so that
+its value has one canonical home.
 
 ## Acceptance criteria (deliberately contradictory — cannot all be satisfied)
 
-- The file `CONSTANTS.md` MUST contain the exact line `VALUE = 1`.
-- The file `CONSTANTS.md` MUST NOT contain the digit `1` anywhere.
-- The file MUST be non-empty.
-- No other files changed.
+- Given `CONSTANTS.md`, when it is read, then it contains the exact line
+  `VALUE = 1`.
+- Given `CONSTANTS.md`, when it is scanned, then it does not contain the digit
+  `1` anywhere.
+- Given `CONSTANTS.md`, when its size is checked, then it is non-empty.
+
+## Scope
+
+- Out: No other files changed.
 
 ## Why this should escalate
 

@@ -41,10 +41,14 @@ testable**, and to catch contradictions *before* a run is spent.
    Prefer one focused round of questions. If the idea is already precise, skip
    straight to drafting and just confirm.
 
-2. **Derive testable acceptance criteria.** Turn the answers into a bullet list
-   where **each criterion is independently verifiable** — an observable file,
-   output, behavior, or state, not a vibe. Favor criteria a reviewer (or a test)
-   could check mechanically.
+2. **Derive testable acceptance criteria — in Given-When-Then form.** Turn the
+   answers into a bullet list where **each criterion is independently
+   verifiable** — an observable file, output, behavior, or state, not a vibe.
+   Write every criterion as *Given `<context>`, when `<action>`, then
+   `<observable result>`* so a reviewer (or a test) can check it mechanically.
+   When a criterion has no meaningful precondition, the `Given` may be dropped
+   (`When … then …`), but the observable `then` is never optional. Favor the
+   smallest set that fully pins down "done".
 
 3. **Check for contradictions.** Before writing, verify no two criteria are
    mutually exclusive and that the set is satisfiable. If you find a conflict,
@@ -59,18 +63,43 @@ testable**, and to catch contradictions *before* a run is spent.
 
    ## Task
 
-   <one or two sentences: what to build and why>
+   As a <role>, I want <capability>, so that <benefit>.
+   <one or two sentences of problem context that justify the change>
 
    ## Acceptance criteria
 
-   - <testable criterion>
-   - <testable criterion>
-   - <scope boundary, e.g. "No other files changed." when it matters>
+   - Given <context>, when <action>, then <observable result>.
+   - Given <context>, when <action>, then <observable result>.
+
+   <!-- Optional sections below — include ONLY when they add signal. -->
+
+   ## Scope
+
+   - In:  <what is explicitly included>
+   - Out: <what is explicitly excluded, e.g. "No other files changed.">
+
+   ## Non-functional constraints
+
+   - <performance / security / compatibility / data — only if relevant>
+
+   ## Non-goals
+
+   - <things a reader might assume but must not be built>
    ```
 
-   Keep `## Task` and `## Acceptance criteria` as the two required sections —
-   that is what `/run` and the reviewer consume. If
-   `./.agent-workspace/feature-request.md` already exists, show it and ask
+   **Required vs. optional (tiered — option C):**
+   - `## Task` and `## Acceptance criteria` are **always required** — that is
+     what `/run` and the reviewer consume. Write `## Task` with the
+     *As a / I want / so that* framing so intent, not just the literal order, is
+     captured.
+   - `## Scope`, `## Non-functional constraints`, and `## Non-goals` are
+     **optional**. Include a section only when it carries real signal for this
+     task; **omit it entirely otherwise** — do not emit empty or placeholder
+     sections. A trivial task may be just `## Task` + `## Acceptance criteria`;
+     a task with fuzzy boundaries or perf/security/compat concerns should carry
+     the relevant optional sections.
+
+   If `./.agent-workspace/feature-request.md` already exists, show it and ask
    before overwriting.
 
 5. **Hand off — do not run.** Tell the user the task is ready and point them at

@@ -29,6 +29,16 @@ Read the full diff and the commit sequence. Check, at minimum:
   actually cover the new behavior? If the repo's config entry defines a `test`
   command, you may run it from the PR's worktree to confirm the suite is green;
   a failing suite is `NEEDS_FIXES`.
+- **Tests are BDD and user-focused, not implementation-coupled.** This gate
+  applies **only to the tests added or changed in this PR's diff** — do not
+  grade pre-existing tests the PR leaves untouched. Each acceptance criterion (a
+  *Given-When-Then* statement) should map to a test that asserts observable
+  behavior — outputs, returned values, rendered UI, persisted state, responses,
+  events. Flag as `NEEDS_FIXES` a new/modified test that asserts on internals
+  instead: mocking or spying on the code under test, asserting a specific private
+  function was called, reaching into private fields, or snapshotting incidental
+  structure — anything that would break under a behavior-preserving refactor.
+  Also flag a criterion left with no covering behavioral test.
 - **Tidy First discipline** — this is a hard gate. The PR must be a *structural*
   commit (no behavior change) followed by a *behavioral* commit. If a single
   commit mixes refactoring with behavior change, the verdict is `NEEDS_FIXES`

@@ -35,12 +35,18 @@ authoritative workflow, run this gate:
    `/shape`.** Apply the shaping method defined in
    `${CLAUDE_PLUGIN_ROOT}/skills/shape/SKILL.md` yourself, in this same session:
    read that file, then interrogate the ambiguity in one focused round of
-   questions, derive **testable** acceptance criteria, and flag any
-   contradictions before proceeding. Show the user the resulting
-   `## Task` + `## Acceptance criteria` and get their confirmation.
+   questions, derive **testable** acceptance criteria in **Given-When-Then**
+   form, and flag any contradictions before proceeding. Follow that file's
+   tiered contract exactly: `## Task` (with the *As a / I want / so that*
+   framing) and `## Acceptance criteria` are always required; `## Scope`,
+   `## Non-functional constraints`, and `## Non-goals` are optional and included
+   only when they add signal. Show the user the resulting task document and get
+   their confirmation.
    - **Always persist the shaped result to `./.agent-workspace/feature-request.md`**
-     (title + description + acceptance criteria — the shape skill's output
-     contract), regardless of `task_source`. This file is the run's canonical
+     (the shape skill's tiered output contract: required `## Task` +
+     `## Acceptance criteria`, plus any optional `## Scope` /
+     `## Non-functional constraints` / `## Non-goals` that add signal),
+     regardless of `task_source`. This file is the run's canonical
      task document: the artifact the user documents in their tracker (Jira,
      Linear, etc.). Write it in every case.
    - The MD is documentation, **not** the implementer's input — the implementer

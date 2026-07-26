@@ -2,15 +2,22 @@
 
 ## Task
 
-Add a root `CHANGELOG.md` to the target repo.
+As a contributor, I want a `CHANGELOG.md` at the repo root, so that anyone can
+see what changed in a release without reading the git log.
 
 ## Acceptance criteria
 
-- A new `CHANGELOG.md` at the repo root.
-- Follows the "Keep a Changelog" format: a `# Changelog` title, a one-line
-  intro, and an `## [Unreleased]` section with an `### Added` subsection that
-  mentions the changelog itself.
-- No other files changed.
+- Given the repo root, when the change is applied, then a `CHANGELOG.md` file
+  exists there.
+- Given `CHANGELOG.md`, when it is opened, then it starts with a `# Changelog`
+  title followed by a one-line intro.
+- Given `CHANGELOG.md`, when its sections are read, then it contains an
+  `## [Unreleased]` section with an `### Added` subsection that mentions the
+  changelog itself.
+
+## Scope
+
+- Out: No other files changed.
 
 ## Why this should pass clean
 

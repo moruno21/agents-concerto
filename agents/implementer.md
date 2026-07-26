@@ -31,6 +31,31 @@ yourself outside them).
 failing test first, then make it pass. If there is genuinely no test
 infrastructure, implement directly and say so in the PR body.
 
+**Write the tests as BDD, from the outside in.** The sub-task's acceptance
+criteria arrive as *Given-When-Then* statements — turn each one into a test
+that mirrors it. The rules:
+
+- **Test observable behavior, not implementation.** Assert on what a user (or a
+  caller of the public interface) can observe: outputs, returned values,
+  rendered UI, persisted state, HTTP responses, emitted events. Never assert on
+  private internals — no reaching into private fields, no mocking or spying on
+  internal helpers, no asserting a specific function was called, no snapshotting
+  incidental structure. If a test would break under a pure refactor that keeps
+  behavior identical, it is testing the wrong thing — rewrite it.
+- **One acceptance criterion → at least one test.** Name each test after the
+  behavior it pins down, phrased from the user's point of view (e.g.
+  `it("shows an error when the email is already registered")`), not after the
+  method under test (`testValidateEmail`). Use the suite's native BDD idiom
+  where one exists (`describe`/`it`, `Scenario`/`Given`/`When`/`Then`, `should`,
+  table/parametrized cases) and match the repo's existing style.
+- **Drive from the boundary.** Prefer exercising the feature through its public
+  entry point (the API, the component, the CLI, the exported function) over
+  unit-testing an inner detail. Mock only true external dependencies (network,
+  clock, third-party services) — never the code under test.
+- **Every criterion must be covered.** If a criterion is not expressible as a
+  behavioral test in this repo, say so explicitly in the PR body rather than
+  silently skipping it or substituting an implementation-detail assertion.
+
 **Run the test command before finishing.** If the repo's config entry defines a
 `test` command, run it from your worktree and make sure it passes before you
 open or update the PR — the sub-task is not done while it fails. State the test
