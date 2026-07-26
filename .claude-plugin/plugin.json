@@ -1,7 +1,7 @@
 {
   "name": "agents-concerto",
   "displayName": "agents-concerto",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Multi-agent development orchestrator: classify by complexity, implement in isolated git worktrees with TDD + Tidy First, review under a two-party boundary, and stop at open PRs for human merge.",
   "author": {
     "name": "Antonio Moruno",
